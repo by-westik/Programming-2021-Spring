@@ -19,15 +19,15 @@ int delete_even_numbers(int *array, int len){
     return len - counter;
 }
 
-void find(int *array, int *min, int *max){
-    int min_a = array[0], max_a = array[0], i = 1;
-    while(array[i]){
+void find(int *array, int *min, int *max, int len){
+    int min_a = array[0], max_a = array[0];
+    for(int i = 0; i < len; i++){
         if(array[i] >= max_a){
             max_a = array[i];
-        }else if(array[i] <= min_a){
+        }
+        if(array[i] <= min_a){
             min_a = array[i];
         }
-        i++;
     }
     *min = min_a;
     *max = max_a;
