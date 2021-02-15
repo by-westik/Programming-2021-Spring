@@ -3,7 +3,8 @@
 #include "function.h"
 #include <string.h>
 
-const char *MSGS[] = {"0. Quit", "1. Removing even numbers in an array", "2. Finding the largest and smallest element i$const int MSGS_SIZE = sizeof(MSGS) / sizeof(MSGS[0]);
+const char *MSGS[] = {"0. Quit", "1. Removing even numbers in an array", "2. Finding the largest and smallest element in array", "3. Line reversal", "4. Binary search"};
+const int MSGS_SIZE = sizeof(MSGS) / sizeof(MSGS[0]);
 
 int dialog(const char *msgs[], int n);
 void function_1();
@@ -13,7 +14,7 @@ void function_4();
 void enter_array(int **array, int *len);
 void array_print(int *array, int len);
 char *enter_str();
-int array_check(int *array);
+int array_check(int *array, int len);
 
 int main() {
     int c;
@@ -62,7 +63,7 @@ void function_1(){
     int *array = NULL;
     int len;
     enter_array(&array, &len);
-    if((len - 1)!= 0){
+    if((len) > 0){
         array_print(array, len);
         len = delete_even_numbers(array, len);
         array_print(array, len);
@@ -72,15 +73,16 @@ void function_1(){
     scanf("%*c");
     free(array);
 }
+#раньше при вводе нуля выводило бы ошибку, теперь не должно...
 
 void function_2(){
     printf("***\nOption 2 - Finding the largest and smallest element in an array\n***\n");
     int *array = NULL;
     int min, max, len;
     enter_array(&array, &len);
-    if((len - 1)!= 0){
+    if(len > 0){
         array_print(array, len);
-        find(array, &min, &max);
+        find(array, &min, &max, len);
         printf("min = %d\nmax = %d\n", min, max);
     }else{
         printf("You entered an empty array. Try next time :(\n");
@@ -110,9 +112,9 @@ void function_4(){
     int *array = NULL;
     printf("Enter array elements in ascending order\n");
     enter_array(&array, &len);
-    if((len - 1) != 0) {
+    if(len > 0) {
         array_print(array, len);
-        if (array_check(array) == 1) {
+        if (array_check(array, len) == 1) {
             printf("Enter the value of the element to find\n");
             scanf("%d", &n);
             printf("index of element = %d\n", binary_search(array, n, len));
@@ -138,12 +140,14 @@ void enter_array(int **array, int *len) {
     int n = 0;
     printf("Enter the number of elements of the array\n");
     scanf("%d", &n);
-    int *new_array = (int*) calloc(n + 1, sizeof(int));
-    for(int i = 0; i < n; i++){
-        printf("Enter the value of the array element\n");
-        scanf("%d", &new_array[i]);
+    if(n > 0){
+        int *new_array = (int*) calloc(n + 1, sizeof(int));
+        for(int i = 0; i < n; i++){
+            printf("Enter the value of the array element\n");
+            scanf("%d", &new_array[i]);
+            }
+        *array = new_array;
     }
-    *array = new_array;
     *len = n;
 }
 
@@ -178,15 +182,15 @@ char *enter_str() {
     return res;
 }
 
-int array_check(int *array){
-    int i = 0, n = 1;
-    while(array[i] && (n == 1)){
-        if(array[i+1]){
-            if(array[i] > array[i+1]){
+int array_check(int *array, int len){
+    int n = 1;
+    for(int i = 0; i < len ; i++){
+        if(array[i + 1] && n == 1){
+            if(array[i] > array[i + 1]){
                 n = 0;
             }
         }
-        i++;
     }
     return n;
 }
+#проверка, что массив введенный пользователем точно отсортирован
