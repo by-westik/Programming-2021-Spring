@@ -1,26 +1,23 @@
 #include "function.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
-int *delete_even_numbers(int *array){
-    int i = 0, j = 0;
-    int *array_new = (int*) calloc(1, sizeof(int));
-    while(array[i]){
-        if(array[i] % 2 == 0){
-            i += 1;
-            continue;
-        } else {
-            array_new = (int*) realloc(array_new,(j + 3) * sizeof(int));
-            array_new[j] = array[i];
-            j++;
-        }
-        i += 1;
+int delete_even_numbers(int *array, int len){
+    int j = 0, counter = 0;
+    for(int i = 0; i < len ; i++){
+         if((array[i] % 2 == 0) && array[i] != 0){
+            counter += 1;
+            for(j = i; j < (len); j++){
+                array[j] = array[j+1];
+            }
+            if((array[i] % 2 == 0) && (array[i] != 0)){
+                i--;
+            }
+         }
     }
-    array_new = (int*) realloc(array_new, (j + 1) * sizeof(int));
-    array_new[j] = 0;
-    return array_new;
+    return len - counter;
 }
-
 
 void find(int *array, int *min, int *max){
     int min_a = array[0], max_a = array[0], i = 1;
@@ -36,19 +33,17 @@ void find(int *array, int *min, int *max){
     *max = max_a;
 }
 
-char *reverse_str(char *str){
-    char *str_new = NULL;
-    str_new = (char*) calloc(strlen(str) + 2, sizeof(char));
-    int j = 0;
-    for(int i = strlen(str) - 1; i >= 0; i--){
-        str_new[j] = str[i];
-        j++;
+void reverse_str(char *str){
+    char symbol;
+    int j = strlen(str) - 1, i = 0;
+    while(i < j){
+        symbol = str[j];
+        str[j] = str[i];
+        str[i] = symbol;
+        i++;
+        j--;
     }
-    str_new[j] = '\0';
-    str_new = (char*) realloc(str_new, j + 1);
-    return str_new;
 }
-
 
 int binary_search(int *array, int n, int len){
     int start = 0, end = len -1, middle;
