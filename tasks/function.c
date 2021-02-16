@@ -4,17 +4,19 @@
 #include <stdio.h>
 
 int delete_even_numbers(int *array, int len){
-    int j = 0, counter = 0;
+    int j = 0, counter = 0, n = 0;
     for(int i = 0; i < len ; i++){
-         if((array[i] % 2 == 0) && array[i] != 0){
-            counter += 1;
-            for(j = i; j < (len); j++){
-                array[j] = array[j+1];
-            }
-            if((array[i] % 2 == 0) && (array[i] != 0)){
-                i--;
-            }
-         }
+        int j = i;
+        while((array[j]% 2 == 0 && array[j] != 0) && (j < len)){
+            j++;
+            counter++;
+        }
+        if(j == len){
+            break;
+        }
+        array[n] = array[j];
+        i = j;
+        n++;
     }
     return len - counter;
 }
