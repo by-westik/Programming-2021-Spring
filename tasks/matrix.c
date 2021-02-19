@@ -69,6 +69,7 @@ void free_matrix(Matrix matrix){
     free(matrix.data);
 }
 
+void function_matrix(Matrix matrix){
     int counter = 0;
     for(int i = 0; i < matrix.rows; i++){
         for(int j = 0; j < matrix.columns; j++){
