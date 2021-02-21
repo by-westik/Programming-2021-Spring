@@ -143,7 +143,7 @@ void put_end(int value, List *list){
     ptr -> data = value;
     ptr -> next = NULL;
 }
-
+// Это, наверное, можно сделать иначе, но я еще не поняла как :(
 int list_palindrom(List *list, int len){
     int i = 0;
     while(i != len / 2){
