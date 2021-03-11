@@ -12,57 +12,6 @@ void copy_element(void* of, void* in, const size_t size_of_element);
 void delete_void_str(struct void_str str);
 void delete_void_ptr_str(struct void_str* str);
 
-int main(){
-    printf("Попытка №3\n\nСейчас попробуем сделать тесты\n");
-    struct void_str str = init_void_str(5, sizeof(void));
-    printf("Исходная строка не void, а просто char - 'abcdf'\n");
-    char proba[5] = "abcdf";
-    for(int i = 0; i < 5; i++){
-        *(char*)str.el_of_indx(&str, i) = proba[i];
-    }
-    printf("Выведем получившуюся строчку\n");
-    for(int i = 0; i < str.size; i++){
-        printf("%c", *(char*)str.el_of_indx(&str, i));
-    }
-    *(char*)str.push_back(&str) = '\0';
-    printf("\nВыведем строчку по другому %s", (char*) str.data);
-    printf("\nТеперь добавим еще 5 элементов к строке\n");
-    char proba_2[5] = "ertyu";
-    for(int i = 0; i < 5; i++){
-        *(char*)str.push_back(&str) = proba_2[i];
-    }
-    *(char*)str.push_back(&str) = '\0';
-    printf("И снова выведем получившуюся строчку\n");
-    for(int i = 0; i < str.size; i++){
-        printf("%c", *(char*)str.el_of_indx(&str, i));
-    }
-    printf("\nВыведем строчку по другому %s", (char*) str.data);
-    printf("\nПопробуем скопировать void строку в другую void строку\n");
-    struct void_str* str_2 = str.copy(&str);
-    printf("Выведем скопированную строчку\n");
-    for(int i = 0; i < str_2 -> size; i++){
-        printf("%c", *(char*)str_2 -> el_of_indx(str_2, i));
-    }
-    printf("\nВыведем строчку по другому %s", (char*) str_2 -> data);
-    printf("\nТеперь добавим еще 3 элемента к новой строке\n");
-    char proba_3[3] = "\tad";
-    for(int i = 0; i < 3; i++){
-        *(char*)str_2 -> push_back(str_2) = proba_3[i];
-    }
-    *(char*)str_2 -> push_back(str_2) = '\0';
-    printf("Измененная сокпированная строка\n");
-    for(int i = 0; i < str_2 -> size; i++){
-        printf("%c", *(char*)str_2 -> el_of_indx(str_2, i));
-    }
-    printf("\nВыведем строчку по другому %s", (char*) str_2 -> data);
-    printf("\nstr_2 -> element_size = %ld\nsizeof(str_2 -> element_size) = %ld\n", str_2 -> element_size, sizeof(str_2 -> element_size));
-    printf("str_2 -> size = %ld\nsizeof(str_2 -> size) = %ld\n", str_2 -> size, sizeof(str_2 -> size));
-    printf("str_2 -> volume = %ld\nsizeof(str_2 -> volume) = %ld\n", str_2 -> volume, sizeof(str_2 -> volume));
-    delete_void_str(str);
-    delete_void_str(*str_2);
-    delete_void_ptr_str(str_2);
-}
-
 void* el_of_indx_void_str(const struct void_str* const this, const size_t index){
     if(index >= this -> size){
         return NULL;
