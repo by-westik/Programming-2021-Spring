@@ -5,40 +5,6 @@
 
 #include "function_for_void_str.h"
 
-int funk(int value);
-struct void_str* create_void_str();
-
-int main(){
-    printf("Введите первую строку\n");
-    struct void_str* str_1 = create_void_str();
-    printf("Введите вторую строку\n");
-    struct void_str* str_2 = create_void_str();
-    printf("Первая строка - '%s'\n", (char*) str_1 -> data);
-    printf("Вторая строка - '%s'\n", (char*) str_2 -> data);
-    struct void_str* result_con = concatenation(str_1, str_2);
-    printf("Объединение двух строк - '%s'\n", (char*) result_con -> data);
-    size_t index_unr_2 = find_substr(str_1, str_2, tolower);
-    printf("Первое вхождение строки 2 в строку 1 начинается по индексу - %ld (не чувствительное к регистру)\n", index_unr_2);
-    size_t index_r_2 = find_substr(str_1, str_2, funk);
-    printf("Первое вхождение строки 2 в строку 1 начинается по индексу - %ld (чувствительное к регистру)\n", index_r_2);
-    size_t start, end;
-    printf("Введите первый индекс подсторки, который хотите выделить в строке 1\n");
-    scanf("%ld", &start);
-    printf("Введите второй индекс подсторки, который хотите выделить в строке 1\n");
-    scanf("%ld", &end);
-    struct void_str* sub_str = substring(str_1, start, end);
-    printf("Подстрока - '%s'\n", (char*) sub_str -> data);
-    delete_void_str(*str_1);
-    delete_void_str(*str_2);
-    delete_void_str(*result_con);
-    delete_void_str(*sub_str);
-    delete_void_ptr_str(str_1);
-    delete_void_ptr_str(str_2);
-    delete_void_ptr_str(result_con);
-    delete_void_ptr_str(sub_str);
-    return 0;
-}
-
 int funk(int value){
     return value;
 }
@@ -80,6 +46,7 @@ size_t find_substr(const struct void_str* const this, const struct void_str* sub
         size_t n = 0;
         while((function(*(char*) this -> el_of_indx(this, j)) == function(*(char*) substring -> el_of_indx(substring, n))) && (j < this -> size - 1) &&  ( n < substrin$            j++;
             n++;
+            j++;
         }
         if(n == substring -> size - 1){
              return index;
@@ -107,22 +74,12 @@ struct void_str* substring(const struct void_str* const this, const size_t start
 }
 
 struct void_str* concatenation(struct void_str* void_str_1, const struct void_str* const void_str_2){
-    if(void_str_1 -> volume >= void_str_1 -> size + void_str_2 -> size){
-        for(size_t i = 0; i < void_str_2 -> size - 1; i++){
-            *(char*)void_str_1 -> push_back(void_str_1) = *(char*) void_str_2 -> el_of_indx(void_str_2, i);
-        }
-        *(char*) void_str_1 -> push_back(void_str_1) = '\0';
-        return void_str_1;
+    if(void_str_1 -> volume < void_str_1 -> size + void_str_2 -> size){
+        void_str_1 -> reserve(void_str_1, void_str_1 -> size + void_str_2 -> size - 1);
     }
-    struct void_str* result = init_void_ptr_str(void_str_1 -> size + void_str_2 -> size - 1, sizeof(void));
-    size_t i = 0;
-    for(i = 0; i < void_str_1 -> size - 1; i++){
-        *(char*)result -> el_of_indx(result, i) = *(char*)void_str_1 -> el_of_indx(void_str_1, i);
+    for(size_t i = 0; i < void_str_2 -> size - 1; i++){
+        *(char*)void_str_1 -> push_back(void_str_1) = *(char*) void_str_2 -> el_of_indx(void_str_2, i);
     }
-    size_t j = 0;
-    for(i; i < result -> size; i++){
-        *(char*)result -> el_of_indx(result, i) = *(char*)void_str_2 -> el_of_indx(void_str_2, j);
-        j++;
-    }
-    return result;
+    *(char*) void_str_1 -> push_back(void_str_1) = '\0';
+    return void_str_1;
 }
