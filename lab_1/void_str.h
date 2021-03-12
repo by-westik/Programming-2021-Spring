@@ -8,6 +8,7 @@ struct void_str{
     void* (*el_of_indx)(const struct void_str* const this, const size_t index);
     void* (*push_back)(struct void_str* const this);
     struct void_str* (*copy)(const struct void_str* const this);
+    void (*reserve)(struct void_str* const this, const size_t new_size);
 };
 
 struct void_str init_void_str(size_t size_of_str, size_t size_of_one_element);
