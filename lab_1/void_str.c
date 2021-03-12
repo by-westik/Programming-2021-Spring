@@ -11,6 +11,7 @@ void copy_data_void_str(const struct void_str* const of, struct void_str* const 
 void copy_element(void* of, void* in, const size_t size_of_element);
 void delete_void_str(struct void_str str);
 void delete_void_ptr_str(struct void_str* str);
+void reserve_void_str(struct void_str* const this, const size_t new_size);
 
 void* el_of_indx_void_str(const struct void_str* const this, const size_t index){
     if(index >= this -> size){
@@ -77,6 +78,17 @@ struct void_str* copy_void_str(const struct void_str* const this){
     return result;
 }
 
+void reserve_void_str(struct void_str* const this, const size_t new_size){
+    if(new_size > this -> volume){
+        this -> volume = new_size;
+        struct void_str* temporary = init_void_ptr_str(this -> volume, this -> element_size);
+        copy_data_void_str(this, temporary);
+        free(this -> data);
+        this -> data = temporary -> data;
+        free(temporary);
+    }
+}
+
 struct void_str init_void_str(size_t size_of_str, size_t size_of_one_element){
     struct void_str result;
     result.size = size_of_str;
@@ -86,6 +98,7 @@ struct void_str init_void_str(size_t size_of_str, size_t size_of_one_element){
     result.el_of_indx = &el_of_indx_void_str;
     result.copy = &copy_void_str;
     result.push_back = &push_back_void_str;
+    result.reserve = &reserve_void_str;
     return result;
 }
 
