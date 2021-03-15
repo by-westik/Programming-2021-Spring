@@ -183,18 +183,10 @@ void max_animals(vector <Animal*> animal){
 //Находим 5 самых толстеньнких котиков
 void max_cats(vector <Animal*> animals){
    sort(animals.begin(), animals.end(), [](const Animal *left, const Animal *right) {
-       if(typeid(*left) == typeid(Cat)){
-           return true;
-       } else {
-           return false;
-       }
+       return typeid(*left) == typeid(Cat);
    });
    sort(animals.rbegin(), animals.rend(), [](const Animal *left, const Animal *right){
-       if((typeid(*left) == typeid(Cat)) && (typeid(*right) == typeid(Cat))) {
-           return left-> weight <= right->weight;
-       } else {
-           return false;
-       }
+       return (typeid(*left) == typeid(Cat)) && (typeid(*right) == typeid(Cat)) && (left-> weight > right->weight);
    });
     //Не знаю, как это за один проход + иногда происходит ошибка, как ниже
 //Process finished with exit code -1073741819 (0xC0000005)
