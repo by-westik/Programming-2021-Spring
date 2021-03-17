@@ -4,11 +4,11 @@
 #include <string.h>
 
 #include "function_for_void_str.h"
-
+//Ничего не изменяющая функция. Нужна ниже, чтобы чувствительный/нечувствительный поиск подстроки сделать при помощи одной функции
 int funk(int value){
     return value;
 }
-
+//Функция, считывающая строку с клавиатуры и записывающая еще значение в void_str
 struct void_str* create_void_str(){
     void *buf[80];
     void *data_result = NULL;
@@ -38,41 +38,62 @@ struct void_str* create_void_str(){
     return result;
 }
 
-size_t find_substr(const struct void_str* const this, const struct void_str* substring, int function(int)){
-    size_t index;
+//Чувствительный/нечувствительный к регистру поиск подстроки в введенной строке
+int find_substr(const struct void_str* const this, const struct void_str* substring, int function(int)){
+    int index;
     for(size_t i = 0; i < this -> size - 1; i++){
         index = i;
         size_t j = i;
         size_t n = 0;
+        //Если поиск чувствительный, то int function(int) = tolower, в другом случае, функция int funk()
         while((function(*(char*) this -> el_of_indx(this, j)) == function(*(char*) substring -> el_of_indx(substring, n))) && (j < this -> size - 1) &&  ( n < substrin$            j++;
             n++;
-            j++;
         }
         if(n == substring -> size - 1){
              return index;
         }
     }
+    return -1;
 }
 
-struct void_str* substring(const struct void_str* const this, const size_t start, const size_t end){
+//Изменяет значение start и end, в случае, когда они отрицательны. То есть представляет отрицательный индекс, как положительный
+size_t create(int n, size_t len){
+    if(n >= 0){
+        return n;
+    }
+    return(len - 1 + n);
+}
+//Поиск подстроки с i по j элемент
+struct void_str* substring(const struct void_str* const this, int start, int end){
+    start = create(start, this -> size);
+    end = create(end, this -> size);
+    if(!this){
+        printf("\n\n***Введен пустой указатель на строку!***\n\n");
+    }
     if((this -> size <= start) || (this -> size <= end)){
-        printf("\n\n***Выход за пределы строки***\n\n");
+        printf("\n\n***Выход за пределы строки!***\n\n");
         return NULL;
     }
+    if(start > end){
+        int tmp = start;
+        start = end;
+        end = tmp;
+    }
+    struct void_str* sub_str = init_void_ptr_str(end - start + 2, sizeof(void));
     if(start == end){
-        printf("\n\n***Введен пустой диапазон для выделения подстроки***\n\n");
-        return NULL;
+        *(char*) sub_str -> el_of_indx(sub_str, 0) = *(char*) this -> el_of_indx(this, start);
+        *(char*) sub_str -> el_of_indx(sub_str, 1) = '\0';
+    } else {
+        size_t i = 0;
+        for(size_t j = start; j <= end; j++){
+            *(char*) sub_str -> el_of_indx(sub_str, i) = *(char*) this -> el_of_indx(this, j);
+            i++;
+        }
+        *(char*) sub_str -> el_of_indx(sub_str, i) = '\0';
     }
-    struct void_str* sub_str = init_void_ptr_str(end - start + 1, sizeof(void));
-    size_t i = 0;
-    for(size_t j = start; j < end; j++){
-        *(char*) sub_str -> el_of_indx(sub_str, i) = *(char*) this -> el_of_indx(this, j);
-         i++;
-    }
-    *(char*) sub_str -> el_of_indx(sub_str, i) = '\0';
     return sub_str;
 }
-
+//Конкантенация строк
 struct void_str* concatenation(struct void_str* void_str_1, const struct void_str* const void_str_2){
     if(void_str_1 -> volume < void_str_1 -> size + void_str_2 -> size){
         void_str_1 -> reserve(void_str_1, void_str_1 -> size + void_str_2 -> size - 1);
