@@ -104,3 +104,29 @@ struct void_str* concatenation(struct void_str* void_str_1, const struct void_st
     *(char*) void_str_1 -> push_back(void_str_1) = '\0';
     return void_str_1;
 }
+//Удаление всех повторений введенной подстроки из строки(доп. задание)
+struct void_str* delete_all_sub_str(struct void_str* this, const struct void_str* const sub_str){
+    for(int i = 0; i < this -> size - 1 ; i++){
+        int j = i;
+        int i_2 = 0;
+        while((*(char*) this -> el_of_indx(this, j) == *(char*) sub_str -> el_of_indx(sub_str, i_2)) && (j < this -> size - 1) && (i_2 < sub_str -> size - 1)){
+            j++;
+            i_2++;
+        }
+        if((j == this -> size - 1) && (i_2 != sub_str -> size - 1)){
+            break;
+        }
+        if(i_2 == sub_str -> size - 1){
+            int k = i;
+            while(j < this -> size - 1){
+               *(char*) this -> el_of_indx(this, k) = *(char*) this -> el_of_indx(this, j);
+                j++;
+                k++;
+            }
+            this -> size = this -> size - sub_str -> size + 1;
+            i--;
+        }
+    }
+    *(char*) this -> el_of_indx(this, this -> size - 1) = '\0';
+    printf("'%s'", (char*) this -> data);
+}
