@@ -55,7 +55,7 @@ public:
 string create_random_name(){
     int max =10, min =  3;
     int len = rand() % (max + 1 - min) + min;
-    string tmp_s;//То есть так строку лучше не создавать?
+    string tmp_s;
     static const char alphanum[] =
             "0123456789"
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -68,6 +68,7 @@ string create_random_name(){
     return tmp_s;
 
 }
+//
 
 //Создаем рандомный возраст в диапазоне от 2 до 12
 int create_random_age(){
@@ -85,58 +86,58 @@ int create_random_weight(){
 
 //Создаем вектор, состоящий только из Собак
 /*
-void create_dog_vector(vector <Dog*> &dog){
+void create_dog_vector(vector <Dog*> &dogs){
     int max = 10, min = 5;
     int size = rand() % (max + 1 - min) + min;
-    vector <Dog*> dogs(size);
+    vector <Dog*> dogs_tmp(size);
     for(int i = 0; i < size; i++){
-        dogs[i] = new Dog(create_random_name() + "_god", create_random_age(), create_random_weight());
+        dogs_tmp[i] = new Dog(create_random_name() + "_god", create_random_age(), create_random_weight());
     }
-    dog = dogs;
+    dogs = dogs_tmp;
 }*/
 
 //Создаем вектор, состоящий только из Котов
-void create_cat_vector(vector <Cat*> &cat){
+void create_cat_vector(vector <Cat*> &cats){
     int max = 10, min = 5;
     int size = rand() % (max + 1 - min) + min;
-    vector <Cat*> cats(size);
+    vector <Cat*> cats_tmp(size);
     for(int i = 0; i < size; i++){
-        cats[i] = new Cat(create_random_name() + "_cat", create_random_age(), create_random_weight());
+        cats_tmp[i] = new Cat(create_random_name() + "_cat", create_random_age(), create_random_weight());
     }
-    cat = cats;
+    cats = cats_tmp;
 }
 
 //Создаем вектор, состоящий только из Кенгуру
 /*
-void create_kangaroo_vector(vector <Kangaroo*> &kangaroo){
+void create_kangaroo_vector(vector <Kangaroo*> &kangaroos){
     int max = 10, min = 3;
     int size = rand() % (max + 1 - min) + min;
-    vector <Kangaroo*> kangaroos(size);
+    vector <Kangaroo*> kangaroos_tmp(size);
     for(int i = 0; i < size; i++){
-        kangaroos[i] = new Kangaroo(create_random_name() + "_kangaroo", create_random_age(), create_random_weight());;
+        kangaroos_tmp[i] = new Kangaroo(create_random_name() + "_kangaroo", create_random_age(), create_random_weight());;
     }
-    kangaroo = kangaroos;
+    kangaroos = kangaroos_tmp;
 }*/
 
 //Создаем вектор, который содержит все три вида животных
-void create_random_vector(vector <Animal*> &animal){
+void create_random_vector(vector <Animal*> &animals){
     int max = 23, min = 5;
     int size = rand() % (max + 1 - min) + min;
-    vector <Animal*> animals(size);
+    vector <Animal*> animals_tmp(size);
     for (int i = 0; i < size; i++){
         if( i % 3  == 0) {
-            animals[i] = new Cat(create_random_name() + "_cat", create_random_age(), create_random_weight());
+            animals_tmp[i] = new Cat(create_random_name() + "_cat", create_random_age(), create_random_weight());
         } else if (i % 2 == 0) {
-            animals[i] = new Dog(create_random_name() + "_dog", create_random_age(), create_random_weight());
+            animals_tmp[i] = new Dog(create_random_name() + "_dog", create_random_age(), create_random_weight());
         } else {
-            animals[i] = new Kangaroo(create_random_name() + "_kangaroo", create_random_age(), create_random_weight());
+            animals_tmp[i] = new Kangaroo(create_random_name() + "_kangaroo", create_random_age(), create_random_weight());
         }
     }
-    animal = animals;
+    animals = animals_tmp;
 }
 
 //Выводим элементы "смешанного" вектора на экран в формате - имя возраст вес
-void print_vector(vector <Animal*> animals){
+void print_vector(const vector <Animal*> &animals){
     for(int i = 0; i < animals.size(); ++i){
         cout << animals[i] -> name << " " << animals[i] -> age << " " << animals[i] -> weight << endl;
     }
@@ -144,9 +145,9 @@ void print_vector(vector <Animal*> animals){
 }
 
 //Выводим элементы вектора котов в формате - имя возраст вес
-void print_cat(vector <Cat*> animals){
-    for(int i = 0; i < animals.size(); ++i){
-        cout << animals[i] -> name << " " << animals[i] -> age << " " << animals[i] -> weight << endl;
+void print_cat(const vector <Cat*> &cats){
+    for(int i = 0; i < cats.size(); ++i){
+        cout << cats[i] -> name << " " << cats[i] -> age << " " << cats[i] -> weight << endl;
     }
     cout << endl;
 }
@@ -160,20 +161,20 @@ int the_biggest_animal(vector <Animal*> animals) {
 }
 
 //Выводим, что говорят животные
-void say_animals(vector <Animal*> animal) {
-    for (int i = 0; i < animal.size(); i++) {
-        cout<< animal[i] -> name << " say " << animal[i] -> Say() << endl;
+void say_animals(const vector <Animal*> &animals) {
+    for (int i = 0; i < animals.size(); i++) {
+        cout<< animals[i] -> name << " say " << animals[i] -> Say() << endl;
     }
     cout << endl;
 }
 
 //Находим, каких животных больше - Кошек, Собак или же Кенгуру
-void max_animals(vector <Animal*> animal){
+void max_animals(vector <Animal*> animals){
     int cat =0, dog = 0, kangaroo = 0;
-    for(int i = 0; i < animal.size(); i++){
-        if(dynamic_cast <Cat*> (animal[i])){
+    for(int i = 0; i < animals.size(); i++){
+        if(dynamic_cast <Cat*> (animals[i])){
             cat++;
-        } else if(dynamic_cast <Dog*> (animal[i])){
+        } else if(dynamic_cast <Dog*> (animals[i])){
             dog++;
         } else {
             kangaroo++;
@@ -183,19 +184,26 @@ void max_animals(vector <Animal*> animal){
     cout << endl;
 }
 
+bool sort_cat(Animal *left, Animal *right){
+    if((!dynamic_cast <Cat*> (left)) && (dynamic_cast <Cat*> (right))){
+        return false;
+    } else if((dynamic_cast <Cat*> (left)) && (dynamic_cast <Cat*> (right))){
+        return left -> weight > right -> weight;
+    } else {
+        return true;
+    }
+}
+
 //Находим 5 самых толстеньнких котиков
 void max_cats(vector <Animal*> animals){
-    sort(animals.begin(), animals.end(), [](Animal *left, Animal *right) {
-        return dynamic_cast <Cat*> (left);
-    });
-    sort(animals.rbegin(), animals.rend(), [](Animal *left, Animal *right) {
-        return (dynamic_cast <Cat*> (left) && dynamic_cast <Cat*> (right)) && (left->weight > right->weight);
-    });
-   int i = 0;
-   while(dynamic_cast <Cat*> (animals[i])){
-       cout << animals[i] -> name << " " << animals[i] -> weight << endl;
-       i++;
-   }
+    print_vector(animals);
+    sort(animals.begin(), animals.end(), sort_cat);
+    print_vector(animals);
+    int i = 0;
+    while(dynamic_cast <Cat*> (animals[i])){
+        cout << animals[i] -> name << " " << animals[i] -> weight << endl;
+        i++;
+    }
 }
 
 
@@ -212,5 +220,6 @@ int main() {
     say_animals(animals);
     max_animals(animals);
     max_cats(animals);
+    cout << "runtime = " << clock() / 1000.0 << endl;
     return 0;
 }
