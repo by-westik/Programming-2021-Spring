@@ -10,6 +10,7 @@ int menu(const char *msgs[], int n);
 void function_1(struct void_str* void_str);
 void function_2(struct void_str* void_str);
 void function_3(struct void_str* void_str);
+void function_4(struct void_str* void_str);
 
 int main() {
     int c = 0;
@@ -35,6 +36,11 @@ int main() {
         case 3:
             printf("********\nПоиск введенной подстроки\n********\n");
             function_3(void_str);
+            break;
+        case 4:
+            printf("********\nУдаление всех подстрок из строки\n********\n");
+            function_4(void_str);
+            break;
         }
     } while (c != 0);
     delete_void_str(*void_str);
@@ -80,6 +86,17 @@ void function_3(struct void_str* void_str){
         index = find_substr(void_str, void_str_2, tolower);
     }
     printf("Первое вхождение строки 2 в строку 1 начинается по индексу - %ld\n", index);
+    delete_void_str(*void_str_2);
+    delete_void_ptr_str(void_str_2);
+}
+
+void function_4(struct void_str* void_str){
+    struct void_str* void_str_2 = NULL;
+    do{
+        void_str_2 = create_void_str();
+    } while (void_str_2 -> size == 1);
+    delete_all_sub_str(void_str, void_str_2);
+    printf("В результате удаления подстроки '%s', получается строка '%s'\n", (char*) void_str_2 -> data, (char*) void_str -> data);
     delete_void_str(*void_str_2);
     delete_void_ptr_str(void_str_2);
 }
