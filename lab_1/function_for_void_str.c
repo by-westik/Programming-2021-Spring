@@ -4,11 +4,11 @@
 #include <string.h>
 
 #include "function_for_void_str.h"
-//Ничего не изменяющая функция. Нужна ниже, чтобы чувствительный/нечувствительный поиск подстроки сделать при помощи одной функции
+
 int funk(int value){
     return value;
 }
-//Функция, считывающая строку с клавиатуры и записывающая еще значение в void_str
+
 struct void_str* create_void_str(){
     void *buf[80];
     void *data_result = NULL;
@@ -18,7 +18,7 @@ struct void_str* create_void_str(){
         n = scanf("%80[^\n]", (char*) buf);
         if(n < 0){
             if(!data_result){
-                printf("Введена пустая строка\n");
+                printf("\n\n***Введена пустая строка***\n\n");
                 return NULL;
             }
         } else if (n > 0){
@@ -31,6 +31,9 @@ struct void_str* create_void_str(){
             scanf("%*c");
         }
     } while (n > 0);
+    if(len == 0){
+        return NULL;
+    }
     struct void_str* result = init_void_ptr_str(len + 1, sizeof(void));
     memcpy((char*) result -> data, (char*) data_result, len);
     *(char*) result -> el_of_indx(result, result -> size - 1) = '\0';
@@ -38,32 +41,29 @@ struct void_str* create_void_str(){
     return result;
 }
 
-//Чувствительный/нечувствительный к регистру поиск подстроки в введенной строке
 int find_substr(const struct void_str* const this, const struct void_str* substring, int function(int)){
     int index;
     for(size_t i = 0; i < this -> size - 1; i++){
         index = i;
         size_t j = i;
         size_t n = 0;
-        //Если поиск чувствительный, то int function(int) = tolower, в другом случае, функция int funk()
         while((function(*(char*) this -> el_of_indx(this, j)) == function(*(char*) substring -> el_of_indx(substring, n))) && (j < this -> size - 1) &&  ( n < substrin$            j++;
             n++;
         }
         if(n == substring -> size - 1){
-             return index;
+            return index;
         }
     }
     return -1;
 }
 
-//Изменяет значение start и end, в случае, когда они отрицательны. То есть представляет отрицательный индекс, как положительный
 size_t create(int n, size_t len){
     if(n >= 0){
         return n;
     }
     return(len - 1 + n);
 }
-//Поиск подстроки с i по j элемент
+
 struct void_str* substring(const struct void_str* const this, int start, int end){
     start = create(start, this -> size);
     end = create(end, this -> size);
@@ -93,7 +93,7 @@ struct void_str* substring(const struct void_str* const this, int start, int end
     }
     return sub_str;
 }
-//Конкантенация строк
+
 struct void_str* concatenation(struct void_str* void_str_1, const struct void_str* const void_str_2){
     if(void_str_1 -> volume < void_str_1 -> size + void_str_2 -> size){
         void_str_1 -> reserve(void_str_1, void_str_1 -> size + void_str_2 -> size - 1);
@@ -104,8 +104,18 @@ struct void_str* concatenation(struct void_str* void_str_1, const struct void_st
     *(char*) void_str_1 -> push_back(void_str_1) = '\0';
     return void_str_1;
 }
-//Удаление всех повторений введенной подстроки из строки(доп. задание)
+
+
 struct void_str* delete_all_sub_str(struct void_str* this, const struct void_str* const sub_str){
+    if(this -> size == 1){
+        printf("\n\n***Из пустой строки нельзя удалить элементы!***\n\n");
+        return NULL;
+    }
+    if(this -> size < sub_str -> size){
+        printf("\n\n***Длина подстроки не может превышает длину строки!***\n\n");
+        return NULL;
+    }
+    int k = 0;
     for(int i = 0; i < this -> size - 1 ; i++){
         int j = i;
         int i_2 = 0;
@@ -117,7 +127,7 @@ struct void_str* delete_all_sub_str(struct void_str* this, const struct void_str
             break;
         }
         if(i_2 == sub_str -> size - 1){
-            int k = i;
+            k = i;
             while(j < this -> size - 1){
                *(char*) this -> el_of_indx(this, k) = *(char*) this -> el_of_indx(this, j);
                 j++;
@@ -128,5 +138,23 @@ struct void_str* delete_all_sub_str(struct void_str* this, const struct void_str
         }
     }
     *(char*) this -> el_of_indx(this, this -> size - 1) = '\0';
-    printf("'%s'", (char*) this -> data);
+    if(!k){
+        printf("Подстроки '%s' в строке '%s' не обнаружено\n", (char*) sub_str -> data, (char*) this -> data);
+        return NULL;
+    }
+}
+
+struct void_str* random_void_str(size_t size, size_t size_of_element){
+    struct void_str* result = init_void_ptr_str(size, size_of_element);
+    for(int i = 0; i < size; i++){
+        if(i % 5 == 0){
+            *(char*) result -> el_of_indx(result, i) = rand() % 26 + 'A';
+        } else if (i % 2 == 0){
+            *(char*) result -> el_of_indx(result, i) = rand() % 26 + 'a';
+        } else {
+            *(char*) result -> el_of_indx(result, i) = rand() % 10 + '0';
+        }
+    }
+    *(char*) result -> el_of_indx(result, result -> size - 1) = '\0';
+    return result;
 }
