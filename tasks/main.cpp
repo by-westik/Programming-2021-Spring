@@ -121,7 +121,7 @@ void create_kangaroo_vector(vector <Kangaroo*> &kangaroos){
 
 //Создаем вектор, который содержит все три вида животных
 void create_random_vector(vector <Animal*> &animals){
-    int max = 23, min = 5;
+    int max = 25, min = 5;
     int size = rand() % (max + 1 - min) + min;
     vector <Animal*> animals_tmp(size);
     for (int i = 0; i < size; i++){
@@ -200,13 +200,18 @@ void max_cats(vector <Animal*> animals){
     sort(animals.begin(), animals.end(), sort_cat);
     print_vector(animals);
     int i = 0;
-    while(dynamic_cast <Cat*> (animals[i])){
+    while((dynamic_cast <Cat*> (animals[i])) && (i < 5)){
         cout << animals[i] -> name << " " << animals[i] -> weight << endl;
         i++;
     }
 }
-
-
+//Котиков много не быввает, особенно, толстеньких)
+/*
+¨/\_/\ ♥
+>^,^<
+¨¨/ \
+’¨(__)__
+*/
 int main() {
     srand(time(NULL));
     vector <Animal*> animals;
