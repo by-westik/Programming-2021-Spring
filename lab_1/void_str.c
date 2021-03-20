@@ -60,6 +60,10 @@ void* push_back_void_str(struct void_str* const this){
     if(this -> size >= this -> volume){
         double_volume_void_str(this);
     }
+    if(this -> size == 0){
+        ++(this -> size);
+        return this -> el_of_indx(this, this -> size - 1);
+    }
     void *data = (char*) this -> data;
     for(size_t i = 0; i < this -> size - 1; i++){
         *((char*) data++);
@@ -67,7 +71,7 @@ void* push_back_void_str(struct void_str* const this){
     if(*(char*) data == '\0'){
         return this -> el_of_indx(this, this -> size - 1);
     }
-    (this -> size)++;
+    ++(this -> size);
     return this -> el_of_indx(this, this -> size - 1);
 }
 
