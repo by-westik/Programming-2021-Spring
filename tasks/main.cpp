@@ -189,11 +189,12 @@ bool sort_cat(Animal *left, Animal *right){
         return false;
     } else if((dynamic_cast <Cat*> (left)) && (dynamic_cast <Cat*> (right))){
         return left -> weight > right -> weight;
-    } else {
+    } else if ((dynamic_cast <Cat*> (left)) && (!dynamic_cast <Cat*> (right))){
+        return true;
+    } else if ((!dynamic_cast <Cat*> (left)) && (!dynamic_cast <Cat*> (right))){
         return true;
     }
 }
-
 //Находим 5 самых толстеньнких котиков
 void max_cats(vector <Animal*> animals){
     print_vector(animals);
