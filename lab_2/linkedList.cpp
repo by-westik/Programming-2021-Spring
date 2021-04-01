@@ -20,7 +20,7 @@ public:
     Item <T> *head;
     Item <T> *tail;
     //Создание пустого списка
-    LinkedList()
+    LinkedList() 
         :head(NULL)
         ,tail(NULL)
         {
@@ -44,7 +44,7 @@ public:
         head = new Item <T> (static_cast <T> (ptr -> data), NULL);
         last = head;
         ptr = ptr -> next;
-        while(ptr != NULL){
+        while(ptr){
             temp = new Item <T> (static_cast <T> (ptr -> data), NULL);
             last -> next = temp;
             last = temp;
@@ -88,35 +88,128 @@ public:
         subList.tail = last;
         return subList;
     }
+    //Получение длины списка
+    int getLength(){
+        Item <T> *ptr = head;
+        int len = 0;
+        while(ptr){
+            len++;
+            ptr = ptr -> next;
+        }
+        return len;
+    }
+    //Вывод списка на экран
+    void printList(){
+        Item <T> *ptr = head;
+        while(ptr){
+            cout << ptr -> data << " ";
+            ptr = ptr -> next;
+        }
+        cout << endl;
+    }
+    //Добавление элемента в начало списка
+    void append(T value){ //Здесь надо передавать ссылку на value?
+        Item <T> *newHead = new Item <T> (value, head);
+        this -> head = newHead;
+        if(!tail){
+            this -> tail = newHead;
+        }
+    }
+    //Добавление элемента в конец списка
+    void prepend(T value){ //Тут тоже по ссылке значение надо передавать?
+        Item <T> *newTail = new Item <T> (value, NULL);
+        if(!head){
+            this -> head = newTail;
+        } else {
+            tail->next = newTail;
+        }
+        this -> tail = newTail;
+    }
+    //Вставка по индексу
+    void insertAt(T value, int index){
+        if(!index){
+            append(value);
+        } else {
+            Item <T> *ptr = head;
+            for(int i = 0; i < index - 1; i++){
+                ptr = ptr -> next;
+            }
+            Item <T> *newElement = new Item <T> (value, ptr -> next -> next);
+            ptr -> next = newElement;
+        }
+    }
+    LinkedList <T> concat (LinkedList <T> *list){
+        tail -> next = list -> head;
+        this -> tail = list -> tail;
+    }
 };
+
+
 
 
 int main() {
     cout << "Hello, World!" << endl;
     int array[5] = {1, 2, 3, 4, 5};
-    LinkedList <int> a();
+    LinkedList <int> a;
     LinkedList <int> b(array, 5);
-    Item <int> *ptr = b.head;
-    for(int i = 0; i < 5; i++){
-        cout << ptr -> data << endl;
-        ptr = ptr -> next;
-    }
+    b.printList();
     LinkedList<int> c(b);
-    Item <int> *ptr_2 = c.head;
-    for(int i = 0; i < 5; i++){
-        cout << ptr_2 -> data << endl;
-        ptr_2 = ptr_2 -> next;
-    }
+    c.printList();
     cout << "Value of tail is " << c.tail -> data << endl;
     cout << "Value of first element " << c.getFirst() << endl;
     cout << "Value of last element " << c.getLast() << endl;
     cout << "Element of index 3 - " << c.get(3) << endl;
     cout << "Create sublist" << endl;
     LinkedList <int> sub = c.getSubList(0, 3);
-    Item <int> *ptr_3 = sub.head;
-    for(int i = 0; i < 3; i++){
-        cout << ptr_3 -> data << endl;
-        ptr_3 = ptr_3 -> next;
+    sub.printList();
+    cout << "Length of list a - " << a.getLength() << endl;
+    cout << "Length of list b - " << b.getLength() << endl;
+    cout << "Length of list c - " << c.getLength() << endl;
+    cout << "Length of sublist - " << sub.getLength() << endl;
+    cout << "Append two elements in list a" << endl;
+    a.append(4);
+    a.append(7);
+    a.printList();
+    cout << "Append five elements in list b" << endl;
+    for(int i = 5; i < 10; i++){
+        b.append(i);
     }
+    b.printList();
+    cout << "Append one element in list c" << endl;
+    c.append(10);
+    c.printList();
+    cout << "Append seven elements in sublist" << endl;
+    for(int i = 6; i < 13; i++){
+        sub.append(i);
+    }
+    sub.printList();
+    cout << "Prepend two elements in list a" << endl;
+    a.prepend(11);
+    a.prepend(12);
+    cout << "a head - " << a.head -> data<< " or " << a.getFirst() << " a tail - " << a.tail -> data << " or " << a.getLast() << endl;
+    a.printList();
+    cout << "Prepend four elements in list b" << endl;
+    for(int i = 7; i < 11; i++){
+        b.prepend(i);
+    }
+    cout << "b head - " << b.head -> data<< " or " << b.getFirst() << " b tail - " << b.tail -> data << " or " << b.getLast() << endl;
+    b.printList();
+    LinkedList<int> empty;
+    cout << "Append element in empty list" << endl;
+    empty.append(7);
+    empty.printList();
+    cout << "empty head - " << empty.head -> data<< " or " << empty.getFirst() << " empty tail - " << empty.tail -> data << " or " << empty.getLast() << endl;
+    cout << "Prepend element in empty_2 list" << endl;
+    LinkedList<int> empty_2;
+    empty_2.prepend(9);
+    empty_2.printList();
+    cout << "empty_2 head - " << empty_2.head -> data<< " or " << empty_2.getFirst() << " empty tail - " << empty_2.tail -> data << " or " << empty_2.getLast() << endl;
+    cout << "Insert 13 in list b position 7" << endl;
+    b.insertAt(13, 7);
+    b.printList();
+    cout << "Append list a to list b" << endl;
+    b.concat(&a);
+    b.printList();
+    cout << "b head - " << b.head -> data<< " or " << b.getFirst() << " b tail - " << b.tail -> data << " or " << b.getLast() << endl;
     return 0;
 }
