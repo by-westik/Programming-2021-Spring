@@ -1,151 +1,152 @@
 #include <iostream>
+#include "LinkedList.h"
 
 using namespace std;
 
-template <class T> class Item{
-public:
-    T data;
-    Item *next;
-    Item(const T& _data, Item* _next = NULL)
-    :data(_data),
-    next(_next)
+//Консруктор одного элемента списка
+template <class T> Item <T>::Item(const T& _data, Item* _next)
+    :data(_data)
+    ,next(_next)
     {
 
     }
-    Item():next(NULL){};
-};
 
-template <class T> class LinkedList{
-public:
-    Item <T> *head;
-    Item <T> *tail;
-    //Создание пустого списка
-    LinkedList() 
-        :head(NULL)
-        ,tail(NULL)
-        {
+//Конструктор пустого списка
+template <class T> LinkedList <T>::LinkedList()
+    :head(NULL)
+    ,tail(NULL)
+    {
 
-        }
-    //Создание списка из массива
-    LinkedList(const T* array, int size = 0) {
-        Item <T> *ptr, *last;
-        head = new Item<T>(array[0], NULL);//А если вместо int будет string, например, то по идее нужно сипользовать move?
-        last = head;
-        for (int i = 1; i < size; i++) {
-            ptr = new Item<T>(array[i], NULL);
-            last -> next = ptr;
-            last = ptr;
-        }
-        tail = last;
-    };
-    //Копирующий конструктор
-    LinkedList(LinkedList <T> const &linkedList) {
-        Item <T> *ptr = linkedList.head, *last, *temp;
-        head = new Item <T> (static_cast <T> (ptr -> data), NULL);
-        last = head;
+    }
+
+//Создание списка из массива
+template <class T> LinkedList <T>::LinkedList(const T *array, int size){
+    Item <T> *ptr, *last;
+    head = new Item<T>(array[0], NULL);//А если вместо int будет string, например, то по идее нужно сипользовать move?
+    last = head;
+    for (int i = 1; i < size; i++) {
+        ptr = new Item<T>(array[i], NULL);
+        last -> next = ptr;
+        last = ptr;
+    }
+    tail = last;
+    }
+
+//Копирующий конструктор
+template <class T> LinkedList <T>::LinkedList(const LinkedList<T> &linkedList) {
+    Item <T> *ptr = linkedList.head, *last, *temp;
+    head = new Item <T> (static_cast <T> (ptr -> data), NULL);
+    last = head;
+    ptr = ptr -> next;
+    while(ptr){
+        temp = new Item <T> (static_cast <T> (ptr -> data), NULL);
+        last -> next = temp;
+        last = temp;
         ptr = ptr -> next;
-        while(ptr){
-            temp = new Item <T> (static_cast <T> (ptr -> data), NULL);
-            last -> next = temp;
-            last = temp;
-            ptr = ptr -> next;
-        }
-        tail = last;
     }
-    //Получение первого элемента из списка
-    T getFirst(){
-        return head -> data;
-    }
-    //В этих трех функциях надо получать значение элемента или указетель на сам элемент?
-    //Получение последнего элемента из списка
-    T getLast(){
-        return tail -> data;
-    }
-    //Получение элемента по индексу
-    T get(const int index){
-        Item <T> *ptr = head;
-        for(int i = 0; i < index; i++){
-            ptr = ptr -> next;
-        }
-        return ptr -> data;
-    }
-    //Получение подлиста
-    LinkedList <T> getSubList(const int start, const int end){
-        Item <T> *ptr = head, *tmp, *last;
-        LinkedList <T> subList;
-        for(int i = 0; i < start; i++){
-            ptr = ptr -> next;
-        }
-        subList.head = new Item <T>(ptr -> data, NULL);
-        last = subList.head;
+    tail = last;
+}
+
+//Получение первого элемента из списка
+template <class T> T LinkedList <T> ::getFirst() {
+    return head -> data;
+}
+
+//Получение последнего элемента из списка
+template <class T> T LinkedList <T> ::getLast() {
+    return tail -> data;
+}
+
+//Получение элемента по индексу
+template <class T> T LinkedList <T> ::get(const int index) {
+    Item <T> *ptr = head;
+    for(int i = 0; i < index; i++){
         ptr = ptr -> next;
-        for(int i = start + 1; i <  end; i++){
-            tmp = new Item <T>(ptr -> data, NULL);
-            last -> next = tmp;
-            last = tmp;
-            ptr = ptr -> next;
-        }
-        subList.tail = last;
-        return subList;
     }
-    //Получение длины списка
-    int getLength(){
+    return ptr -> data;
+}
+//В трех функциях выше нужно возвращать именно элемент, то есть указеталь, а  не его значение?
+
+//Получение подсписка
+template <class T> LinkedList <T> LinkedList <T> ::getSubList(const int start, const int end){
+    Item <T> *ptr = head, *tmp, *last;
+    LinkedList <T> subList;
+    for(int i = 0; i < start; i++){
+        ptr = ptr -> next;
+    }
+    subList.head = new Item <T>(ptr -> data, NULL);
+    last = subList.head;
+    ptr = ptr -> next;
+    for(int i = start + 1; i <  end; i++){
+        tmp = new Item <T>(ptr -> data, NULL);
+        last -> next = tmp;
+        last = tmp;
+        ptr = ptr -> next;
+    }
+    subList.tail = last;
+    return subList;
+}
+
+//Получение длины списка
+template <class T> int LinkedList <T>::getLength() {
+    Item <T> *ptr = head;
+    int len = 0;
+    while(ptr){
+        len++;
+        ptr = ptr -> next;
+    }
+    return len;
+}
+
+//Вывод списка на экран
+template <class T> void LinkedList <T>::printList() {
+    Item <T> *ptr = head;
+    while(ptr){
+        cout << ptr -> data << " ";
+        ptr = ptr -> next;
+    }
+    cout << endl;
+}
+
+//Добавление элемента в начало списка
+template <class T> void LinkedList <T>::append(T value) { //Здесь надо передавать ссылку на value?
+    Item <T> *newHead = new Item <T> (value, head);
+    this -> head = newHead;
+    if(!tail){
+        this -> tail = newHead;
+    }
+}
+
+//Добавление элемента в конец списка
+template <class T> void LinkedList <T>::prepend(T value) {//Тут тоже по ссылке значение надо передавать?
+    Item <T> *newTail = new Item <T> (value, NULL);
+    if(!head){
+        this -> head = newTail;
+    } else {
+        tail->next = newTail;
+    }
+    this -> tail = newTail;
+}
+
+//Вставка элемента по индексу
+template <class T> void LinkedList <T>::insertAt(T value, int index) {
+    if(!index){
+        append(value);
+    } else {
         Item <T> *ptr = head;
-        int len = 0;
-        while(ptr){
-            len++;
+        for(int i = 0; i < index - 1; i++){
             ptr = ptr -> next;
         }
-        return len;
+        Item <T> *newElement = new Item <T> (value, ptr -> next -> next);
+        ptr -> next = newElement;
     }
-    //Вывод списка на экран
-    void printList(){
-        Item <T> *ptr = head;
-        while(ptr){
-            cout << ptr -> data << " ";
-            ptr = ptr -> next;
-        }
-        cout << endl;
-    }
-    //Добавление элемента в начало списка
-    void append(T value){ //Здесь надо передавать ссылку на value?
-        Item <T> *newHead = new Item <T> (value, head);
-        this -> head = newHead;
-        if(!tail){
-            this -> tail = newHead;
-        }
-    }
-    //Добавление элемента в конец списка
-    void prepend(T value){ //Тут тоже по ссылке значение надо передавать?
-        Item <T> *newTail = new Item <T> (value, NULL);
-        if(!head){
-            this -> head = newTail;
-        } else {
-            tail->next = newTail;
-        }
-        this -> tail = newTail;
-    }
-    //Вставка по индексу
-    void insertAt(T value, int index){
-        if(!index){
-            append(value);
-        } else {
-            Item <T> *ptr = head;
-            for(int i = 0; i < index - 1; i++){
-                ptr = ptr -> next;
-            }
-            Item <T> *newElement = new Item <T> (value, ptr -> next -> next);
-            ptr -> next = newElement;
-        }
-    }
-    LinkedList <T> concat (LinkedList <T> *list){
-        tail -> next = list -> head;
-        this -> tail = list -> tail;
-    }
-};
+}
 
-
-
+//Объединение двух списков
+template <class T> LinkedList <T> LinkedList <T>::concat(LinkedList<T> *list) {
+    tail -> next = list -> head;
+    this -> tail = list -> tail;
+}
 
 int main() {
     cout << "Hello, World!" << endl;
