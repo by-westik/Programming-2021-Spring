@@ -6,29 +6,30 @@ using namespace std;
 //Я правильно объявляю конструктор? просто если написать DynamicArray(int _size = 0), то появляется ошибка
 //Создание массива, указанной длины
 template <class T> DynamicArray <T>:: DynamicArray(int _size)
-    :size(_size)
-    {
+        :size(_size)
+        ,array(new T(_size))
+{
 
-    }
+}
 
 //Создание динамического массива из статического массива
 template <class T> DynamicArray <T>::DynamicArray(const T *_array, int _size)
-    :size(_size)
-    ,array(new T(_size))
-    {
-        for(int i = 0; i < _size; i++){
-            array[i] = _array[i];
-        }
+        :size(_size)
+        ,array(new T(_size))
+{
+    for(int i = 0; i < _size; i++){
+        array[i] = _array[i];
     }
+}
 
 
 //Копирующий конструктор
 template <class T> DynamicArray <T>::DynamicArray(const DynamicArray<T> &dynamicArray)
-    :size(dynamicArray.size)
-    ,array(dynamicArray.array)
-    {
+        :size(dynamicArray.size)
+        ,array(dynamicArray.array)
+{
 
-    }
+}
 
 //Вывод массива на экран
 template <class T> void DynamicArray <T>::printArray() {
@@ -44,8 +45,8 @@ template <class T> const T& DynamicArray <T>::get(int index) {
 
 //Задать элемент по индексу
 template <class T> void DynamicArray <T>::set(int index, T value) {
-    array[index] = value;//Я все сломала( На этом моменте появляется ошибка сегментации
-    // (ಥ﹏ಥ) памагите, пожалуйста
+    array[index] = value;//Теперь подчинила
+    // (* ^ ω ^)
 }
 
 //Получить длину массива
@@ -56,9 +57,9 @@ template <class T> int DynamicArray <T>::getSize() {
 //Изменить размер массива
 template <class T> void DynamicArray <T>::resize(int newSize) {
     if(size > newSize){
-        array = (T*) realloc(array, newSize * sizeof(T));
+        array = static_cast <T*> (realloc(array, newSize * sizeof(T)));
     }else if (size < newSize){
-        T* newArray  = (T*) realloc(array, newSize * sizeof(T));
+        T* newArray  = static_cast <T*> (realloc(array, newSize * sizeof(T)));
         array = newArray;
     }
     size = newSize;
