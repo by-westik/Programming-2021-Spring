@@ -9,7 +9,12 @@ template <class T> class Item{
 public:
     T data;
     Item *next;
-    Item(const T& _data, Item* _next);
+    Item(const T& _data, Item* _next = NULL)
+    :data(_data),
+    next(_next)
+    {
+
+    };
 };
 
 template <class T> class LinkedList{
@@ -21,7 +26,7 @@ public:
     ,tail(NULL)
     {
 
-    };
+    };//Можно ли внутри листа еще его длину хранить, чтоб все время не считать?
     LinkedList(const T* array, int size){
         Item <T> *ptr, *last;
         head = new Item<T>(array[0], NULL);
@@ -49,10 +54,10 @@ public:
     T& getFirst(){
         return head -> data;
     }
-    T getLast(){
+    T& getLast(){
         return tail -> data;
     }
-    T get(const int index) {
+    T& get(int index) {
         Item <T> *ptr = head;
         for(int i = 0; i < index; i++){
             ptr = ptr -> next;
