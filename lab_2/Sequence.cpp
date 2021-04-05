@@ -23,10 +23,34 @@ int main() {
         a.prepend(i);
     }
     a.printArraySequence();
-    cout << "Create subSequence from a (startIndex = 3, end Index = 8)" << endl;
-    ArraySequence <int>* a_sub;
-    a_sub = dynamic_cast <ArraySequence<int>*> (a.getSubsequence(3,8));
-    cout << a_sub -> getLength() << endl;
-    a_sub -> printArraySequence();
+    cout << "Insert element in a(index 7)" << endl;
+    a.insertAt(456, 7);
+    a.printArraySequence();
+    cout << "LinkedList" << endl;
+    LinkedListSequence<int> l(array_1, 5);
+    cout << "Create LinkedListSequence l" << endl;
+    l.printLinkedListSequence();
+    cout << "First l element - " << l.getFirst()  << " last l element - " << l.getLast() << " len of l - " << l.getLength() << endl;
+    cout << "Create copy LinkedListSequence l_copy" << endl;
+    LinkedListSequence<int> l_copy(l);
+    l_copy.printLinkedListSequence();
+    cout << "First l_copy element - " << l_copy.getFirst()  << " last l_copy element - " << l_copy.getLast() << " len of l_copy - " << l_copy.getLength() << endl;
+    cout << "Append 7 elements in l" << endl;
+    for(int i = 0; i < 7; i++){
+        l.append(i);
+    }
+    l.printLinkedListSequence();
+    cout << "First l element - " << l.getFirst()  << " last l element - " << l.getLast() << " len of l - " << l.getLength() << endl;
+    cout << "Prepend 5 elements in l" << endl;
+    for(int i = 0; i < 5; i++){
+        l.prepend(i);
+    }
+    l.printLinkedListSequence();
+    cout << "First l element - " << l.getFirst()  << " last l element - " << l.getLast() << " len of l - " << l.getLength() << endl;
+    cout << "Create sublist from l (startIndex = 4; endIndex = 9" << endl;
+    cout << "Insert element 456 in l (index = 0)" << endl;
+    l.insertAt(456, 9);
+    l.printLinkedListSequence();
+    cout << "First l element - " << l.getFirst()  << " last l element - " << l.getLast() << " len of l - " << l.getLength() << endl;
     return 0;
 }
