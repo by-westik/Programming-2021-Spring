@@ -62,7 +62,7 @@ public:
                 newArray[i] = std::move(array[i]);
             }
         }
-        *array = std::move(*newArray);
+        array = std::move(newArray);
         size = newSize;
     }
 };
