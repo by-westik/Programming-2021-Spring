@@ -64,14 +64,16 @@ public:
         }
         return ptr -> data;
     }
-    LinkedList <T> getSubList(const int start, const int end){
+    LinkedList <T>* getSubList(int start, int end){
         Item <T> *ptr = head, *tmp, *last;
-        LinkedList <T> subList;
+        LinkedList <T> *subList = new LinkedList<T>();
+        //std::cout << " * " << std::endl;
         for(int i = 0; i < start; i++){
             ptr = ptr -> next;
         }
-        subList.head = new Item <T>(ptr -> data, NULL);
-        last = subList.head;
+        subList -> head = new Item <T>(ptr -> data, NULL);
+       // std::cout << subList -> head -> data << std::endl;
+        last = subList -> head;
         ptr = ptr -> next;
         for(int i = start + 1; i <  end; i++){
             tmp = new Item <T>(ptr -> data, NULL);
@@ -79,7 +81,9 @@ public:
             last = tmp;
             ptr = ptr -> next;
         }
-        subList.tail = last;
+        subList -> tail = last;
+      //  std::cout << " ! " << std::endl;
+      //  subList -> printList();
         return subList;
     }
     int getLength(){
@@ -124,7 +128,7 @@ public:
                 ptr = ptr -> next;
             }
             Item <T> *newElement = new Item <T> (value, ptr -> next -> next);
-            ptr -> next = newElement;
+            ptr -> next -> next = newElement;
         }
     }
     LinkedList <T> concat (LinkedList <T> *list) {
