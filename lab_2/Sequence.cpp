@@ -26,6 +26,9 @@ int main() {
     cout << "Insert element in a(index 7)" << endl;
     a.insertAt(456, 7);
     a.printArraySequence();
+    ArraySequence<int> *sub_array = new ArraySequence<int>(*dynamic_cast <ArraySequence<int>*>(a.getSubsequence(3, 7)));
+    cout << "Sub array" << endl;
+    sub_array -> printArraySequence();
     cout << "LinkedList" << endl;
     LinkedListSequence<int> l(array_1, 5);
     cout << "Create LinkedListSequence l" << endl;
@@ -52,5 +55,8 @@ int main() {
     l.insertAt(456, 9);
     l.printLinkedListSequence();
     cout << "First l element - " << l.getFirst()  << " last l element - " << l.getLast() << " len of l - " << l.getLength() << endl;
+    LinkedListSequence<int> *sub_l = new LinkedListSequence<int>(*dynamic_cast <LinkedListSequence<int>*>(l.getSubsequence(3, 11)));
+    sub_l -> printLinkedListSequence();
+    cout << "First  sub_l element - " <<  sub_l -> getFirst()  << " last  sub_l element - " <<  sub_l -> getLast() << " len of  sub_l - " <<  sub_l -> getLength() << endl;
     return 0;
 }
