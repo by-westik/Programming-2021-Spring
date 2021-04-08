@@ -11,14 +11,13 @@ public:
     virtual T& getFirst() = 0;
     virtual T& getLast() = 0;
     virtual T& get(int index) = 0;
-   // virtual Sequence <T>* getSubsequence(int startIndex,int endIndex) = 0;
+    virtual Sequence <T>* getSubsequence(int startIndex,int endIndex) = 0;
     virtual int getLength() = 0;
     virtual void append(T item) = 0;
     virtual void prepend(T item) = 0;
     virtual void insertAt(T item, int index) = 0;
  //   virtual Sequence <T>* concat(Sequence <T> *list) = 0;
 };
-
 template <class T> class LinkedListSequence : public Sequence <T>{
 public:
     LinkedList <T> *data;
@@ -37,6 +36,9 @@ public:
     {
 
     };
+    ~LinkedListSequence(){
+        delete data;
+    }
     T& getFirst() override
     {
         return this -> data -> getFirst();
@@ -67,9 +69,11 @@ public:
     void printLinkedListSequence(){
         this -> data -> printList();
     };
-
-    Sequence <T>* getSubsequence(int startIndex,int endIndex){
-        LinkedListSequence<T> *subSequence = new LinkedListSequence<T>();
+    //Тут утечки памяти из-за new, но без него пока сделать не получается
+    Sequence <T>* getSubsequence(int startIndex,int endIndex) override
+    {
+        LinkedListSequence<T> *subSequence(new LinkedListSequence<T>());
+        delete subSequence -> data;
         subSequence -> data = this -> data -> getSubList(startIndex, endIndex);
         return dynamic_cast <Sequence<T>*> (subSequence);
     }
@@ -82,7 +86,7 @@ public:
     ArraySequence(const T* _array, int _size)
     :data(new DynamicArray<T>(_array, _size))
     {
-
+       std::cout << "ArraySequence const* Constructor" << std::endl;
     };
     ArraySequence()
     :data(new DynamicArray<T>(0))
@@ -92,7 +96,11 @@ public:
     ArraySequence(ArraySequence<T> &arraySequence)
     :data(new DynamicArray<T>(*arraySequence.data))
     {
-
+       std::cout << "ArraySequence copy Constructor" << std::endl;
+    };
+    ~ArraySequence(){
+      std::cout << "ArraySequence Destructor" << std::endl;
+      delete data;
     };
     T& getFirst() override
     {
@@ -106,11 +114,12 @@ public:
     {
         return this -> data -> get(index);
     };
-    Sequence <T>* getSubsequence(int startIndex,int endIndex)
+    //Тут тоже утечки памяти из-за new
+    Sequence <T>* getSubsequence(int startIndex,int endIndex) override
     {
-        ArraySequence <T> *subSequence = new ArraySequence<T>();
+        ArraySequence <T> *subSequence(new ArraySequence <T> ());
         int j = 0;
-        subSequence -> data ->resize(endIndex - startIndex);
+        subSequence -> data -> resize(endIndex - startIndex);
         for(int i = startIndex; i < endIndex; i++){
             subSequence -> data -> set(j, this -> data -> array[i]);
             j++;
@@ -152,3 +161,4 @@ public:
 
 
 #endif //LABA_2_SEQUENCE_H
+
