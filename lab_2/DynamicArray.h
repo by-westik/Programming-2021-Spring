@@ -11,23 +11,30 @@ public:
     int size;
     DynamicArray(int _size)
     :size(_size)
-    ,array(new T(_size))
+    ,array(new T[_size])
     {
-
     };
     DynamicArray(const T* _array, int _size)
     :size(_size)
-    ,array(new T(_size))
+    ,array(new T[_size])
     {
         for(int i = 0; i < _size; i++){
-            array[i] = _array[i];
+            array[i] = std::move(_array[i]);
         }
+       std::cout << "DynamicArray const* Constructor" << std::endl;
     };
     DynamicArray(DynamicArray <T> const &dynamicArray)
     :size(dynamicArray.size)
-    ,array(dynamicArray.array)
+    ,array(new T[dynamicArray.size])
     {
-
+       for(int i = 0; i < dynamicArray.size; i++){
+           array[i] = std::move(dynamicArray.array[i]);
+       }
+       std::cout << "DynamicArray copy Constructor" << std::endl;
+    };
+    ~DynamicArray(){
+        std::cout << "DynamicArray destructor" << std::endl;
+        delete[] array;
     };
     void printArray()
     {
@@ -49,20 +56,18 @@ public:
     }
     void resize(int newSize)
     {
-        T* newArray = static_cast <T*> (calloc(newSize, sizeof(T)));// У меня не получилось использовать тут new(
-      //Если с New,то при обычном запуске не работает
-      // и выдает ошибку Process finished with exit code -1073740940 (0xC0000374) в фунциях append,prepend, insetrAt
-//Но если запустить с debug то все работает
+        T *newArray = new T[newSize];
         if(size > newSize){
-            for(int i = 0; i < newSize; i++){
+             for(int i = 0; i < newSize; i++){
                 newArray[i] = std::move(array[i]);
-            }
+             }
         } else if(size <= newSize){
             for(int i = 0; i < size; i++){
                 newArray[i] = std::move(array[i]);
             }
         }
-        array = std::move(newArray);
+        delete[] array;
+        this -> array = newArray;
         size = newSize;
     }
 };
