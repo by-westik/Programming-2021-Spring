@@ -16,8 +16,9 @@ public:
     virtual void append(T item) = 0;
     virtual void prepend(T item) = 0;
     virtual void insertAt(T item, int index) = 0;
- //   virtual Sequence <T>* concat(Sequence <T> *list) = 0;
+    virtual Sequence <T>* concat(Sequence <T> *list) = 0;
 };
+
 template <class T> class LinkedListSequence : public Sequence <T>{
 public:
     LinkedList <T> *data;
@@ -69,16 +70,19 @@ public:
     void printLinkedListSequence(){
         this -> data -> printList();
     };
-    //Тут утечки памяти из-за new, но без него пока сделать не получается
     Sequence <T>* getSubsequence(int startIndex,int endIndex) override
     {
         LinkedListSequence<T> *subSequence(new LinkedListSequence<T>());
-        delete subSequence -> data;
         subSequence -> data = this -> data -> getSubList(startIndex, endIndex);
         return dynamic_cast <Sequence<T>*> (subSequence);
-    }
+    };
+    Sequence <T>* concat(Sequence <T> *list) override
+    {
+        LinkedListSequence<T> *concatSequence(new LinkedListSequence<T>());
+        concatSequence -> data = this -> data -> concat((dynamic_cast <LinkedListSequence<T>*>(list)) -> data);
+        return dynamic_cast <Sequence<T>*> (concatSequence);
+    };
 };
-
 template <class T> class ArraySequence :public Sequence<T>{
 
 public:
@@ -86,7 +90,7 @@ public:
     ArraySequence(const T* _array, int _size)
     :data(new DynamicArray<T>(_array, _size))
     {
-       std::cout << "ArraySequence const* Constructor" << std::endl;
+
     };
     ArraySequence()
     :data(new DynamicArray<T>(0))
@@ -96,10 +100,9 @@ public:
     ArraySequence(ArraySequence<T> &arraySequence)
     :data(new DynamicArray<T>(*arraySequence.data))
     {
-       std::cout << "ArraySequence copy Constructor" << std::endl;
+
     };
     ~ArraySequence(){
-      std::cout << "ArraySequence Destructor" << std::endl;
       delete data;
     };
     T& getFirst() override
@@ -114,7 +117,6 @@ public:
     {
         return this -> data -> get(index);
     };
-    //Тут тоже утечки памяти из-за new
     Sequence <T>* getSubsequence(int startIndex,int endIndex) override
     {
         ArraySequence <T> *subSequence(new ArraySequence <T> ());
@@ -144,16 +146,25 @@ public:
         data -> resize(data -> size + 1);
         data -> set(data -> size - 1, item);
     };
-    void insertAt(T item, int index) override{
+    void insertAt(T item, int index) override
+    {
         data -> resize(data -> size + 1);
         for(int i = data -> size - 1; i > index; i--){
             data -> set(i, data ->get(i - 1));
         }
         data -> set(index, item);
     };
-    /*Sequence <T>* concat(Sequence <T> *list) override{
-
-    };*/
+    Sequence <T>* concat(Sequence <T> *list) override
+    {
+       ArraySequence <T> *concatSequence(new ArraySequence <T>(*this));
+       concatSequence -> data -> resize(data -> size + dynamic_cast <ArraySequence<T>*> (list) -> data -> size);
+       int j = this -> data -> size;
+       for(int i = 0; i < dynamic_cast <ArraySequence<T>*> (list) -> data -> size; i++){
+           concatSequence -> data -> set(j, (dynamic_cast <ArraySequence<T>*> (list)) -> data -> get(i));
+           j++;
+       }
+       return dynamic_cast <Sequence<T>*> (concatSequence);
+    };
     void printArraySequence(){
         this -> data -> printArray();
     };
@@ -161,4 +172,3 @@ public:
 
 
 #endif //LABA_2_SEQUENCE_H
-
