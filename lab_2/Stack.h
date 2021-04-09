@@ -18,7 +18,7 @@ public:
     {
     };
     Stack(Stack <T> &stack)
-    :list(new LinkedListSequence<T>(stack.list))
+    :list(new LinkedListSequence<T>(*(stack.list)))
     {
     };
     ~Stack(){
@@ -26,9 +26,9 @@ public:
     }
     bool isEmpty(){
         if(!(this -> list -> data -> size)){
-            return false;
+            return true;
         };
-        return true;
+        return false;
     };
     int getSize(){
         return this -> list -> getLength();
@@ -36,7 +36,7 @@ public:
     T& top(){
         return this -> list ->  getFirst();
     };
-      void printStack(){
+    void printStack(){
         this -> list -> printLinkedListSequence();
     };
     void push(T item){
@@ -47,6 +47,23 @@ public:
         this -> list -> data -> head = this -> list -> data -> head -> next;
         delete ptr;
         this -> list -> data -> size--;
+    };
+    void map(){
+        Item <T> *ptr = this -> list -> data -> head;
+        while(ptr){
+            ptr -> data *= 2;
+            ptr = ptr -> next;
+        };
+    };
+    Stack <T>* subStack(int startIndex, int endIndex){
+        Stack<T> *subStack(new Stack());
+        subStack -> list = static_cast <LinkedListSequence<T>*> (this -> list ->getSubsequence(startIndex, endIndex));
+        return subStack;
+    }
+    Stack <T>* concatStack(Stack<T> &stack){
+        Stack<T> *concatStack(new Stack(*this));
+        concatStack -> list = static_cast <LinkedListSequence<T>*> (this -> list -> concat(dynamic_cast<Sequence<T>*>(stack.list)));
+        return concatStack;
     };
 };
 
