@@ -143,9 +143,12 @@ public:
             this -> size++;
         }
     }
-    LinkedList <T> concat (LinkedList <T> *list) {
-        tail -> next = list -> head;
-        this -> tail = list -> tail;
+    LinkedList <T>* concat (LinkedList <T> *list) {
+        LinkedList <T> *concatList(new LinkedList(*this));
+        concatList -> tail -> next = list -> head;
+        concatList -> tail = list -> tail;
+        concatList -> size = this -> size + list -> size;
+        return concatList;
     }
 };
 #endif //LABA_2_LINKEDLIST_H
