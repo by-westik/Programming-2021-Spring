@@ -11,12 +11,12 @@ public:
     virtual T& getFirst() = 0;
     virtual T& getLast() = 0;
     virtual T& get(int index) = 0;
-    virtual Sequence <T>* getSubsequence(int startIndex,int endIndex) = 0;
+    virtual void getSubsequence(int startIndex, int endIndex, Sequence <T> &subSequence) = 0;
     virtual int getLength() = 0;
     virtual void append(T item) = 0;
     virtual void prepend(T item) = 0;
     virtual void insertAt(T item, int index) = 0;
-    virtual Sequence <T>* concat(Sequence <T> *list) = 0;
+    virtual void concat(Sequence <T> *list, Sequence <T> &newSubsequence) = 0;
 };
 
 template <class T> class LinkedListSequence : public Sequence <T>{
@@ -58,33 +58,29 @@ public:
     };
     void append(T item) override
     {
-        data -> append(item);
+        this -> data -> append(item);
     };
     void prepend(T item) override
     {
-        data -> prepend(item);
+        this -> data -> prepend(item);
     };
     void insertAt(T item, int index) override{
-        data -> insertAt(item, index);
+        this -> data -> insertAt(item, index);
     };
     void printLinkedListSequence(){
         this -> data -> printList();
     };
-    Sequence <T>* getSubsequence(int startIndex,int endIndex) override
+    void getSubsequence(int startIndex,int endIndex, Sequence <T> &subSequence) override
     {
-        LinkedListSequence<T> *subSequence(new LinkedListSequence<T>());
-        subSequence -> data = this -> data -> getSubList(startIndex, endIndex);
-        return dynamic_cast <Sequence<T>*> (subSequence);
+        this -> data -> getSubList(startIndex, endIndex, *(dynamic_cast <LinkedListSequence<T>&>(subSequence).data));
     };
-    Sequence <T>* concat(Sequence <T> *list) override
+    void concat(Sequence <T> *list, Sequence <T> &concatSequence) override
     {
-        LinkedListSequence<T> *concatSequence(new LinkedListSequence<T>());
-        concatSequence -> data = this -> data -> concat((dynamic_cast <LinkedListSequence<T>*>(list)) -> data);
-        return dynamic_cast <Sequence<T>*> (concatSequence);
+        this -> data -> concat((dynamic_cast <LinkedListSequence<T>*>(list)) -> data, *(dynamic_cast <LinkedListSequence<T>&>(concatSequence).data));
     };
 };
-template <class T> class ArraySequence :public Sequence<T>{
 
+template <class T> class ArraySequence :public Sequence<T>{
 public:
     DynamicArray <T> *data;
     ArraySequence(const T* _array, int _size)
@@ -95,12 +91,10 @@ public:
     ArraySequence()
     :data(new DynamicArray<T>(0))
     {
-
     };
-    ArraySequence(ArraySequence<T> &arraySequence)
+        ArraySequence(ArraySequence<T> &arraySequence)
     :data(new DynamicArray<T>(*arraySequence.data))
     {
-
     };
     ~ArraySequence(){
       delete data;
@@ -117,16 +111,14 @@ public:
     {
         return this -> data -> get(index);
     };
-    Sequence <T>* getSubsequence(int startIndex,int endIndex) override
+    void getSubsequence(int startIndex, int endIndex, Sequence <T> &subSequence) override
     {
-        ArraySequence <T> *subSequence(new ArraySequence <T> ());
         int j = 0;
-        subSequence -> data -> resize(endIndex - startIndex);
+        dynamic_cast <ArraySequence<T>&> (subSequence).data -> resize(endIndex - startIndex);
         for(int i = startIndex; i < endIndex; i++){
-            subSequence -> data -> set(j, this -> data -> array[i]);
+            dynamic_cast <ArraySequence<T>&> (subSequence).data -> set(j, this -> data -> array[i]);
             j++;
         }
-        return dynamic_cast <Sequence<T>*> (subSequence);
     };
 
     int getLength() override
@@ -135,35 +127,36 @@ public:
     };
     void append(T item) override
     {
-        data -> resize(data -> size + 1);
+        this -> data -> resize(data -> size + 1);
         for(int i = data -> size - 1; i > 0; i--){
-            data -> set(i, data -> get(i - 1));
+            this -> data -> set(i, this -> data -> get(i - 1));
         }
-        data -> set(0, item);
+        this -> data -> set(0, item);
     };
     void prepend(T item) override
     {
-        data -> resize(data -> size + 1);
-        data -> set(data -> size - 1, item);
+        this -> data -> resize(data -> size + 1);
+        this -> data -> set(data -> size - 1, item);
     };
     void insertAt(T item, int index) override
     {
-        data -> resize(data -> size + 1);
-        for(int i = data -> size - 1; i > index; i--){
-            data -> set(i, data ->get(i - 1));
+        this -> data -> resize(data -> size + 1);
+        for(int i = this -> data -> size - 1; i > index; i--){
+            this -> data -> set(i, this -> data ->get(i - 1));
         }
-        data -> set(index, item);
+        this -> data -> set(index, item);
     };
-    Sequence <T>* concat(Sequence <T> *list) override
+    void concat(Sequence <T> *list, Sequence <T> &newSequence) override
     {
-       ArraySequence <T> *concatSequence(new ArraySequence <T>(*this));
-       concatSequence -> data -> resize(data -> size + dynamic_cast <ArraySequence<T>*> (list) -> data -> size);
-       int j = this -> data -> size;
+       dynamic_cast <ArraySequence<T>&> (newSequence).data -> resize(this -> data -> size + dynamic_cast <ArraySequence<T>*> (list) -> data -> size);
+       int j = 0;
+       for(j; j < this -> data -> size; j++){
+           dynamic_cast <ArraySequence<T>&> (newSequence).data -> set(j, (this -> data -> get(j)));
+       }
        for(int i = 0; i < dynamic_cast <ArraySequence<T>*> (list) -> data -> size; i++){
-           concatSequence -> data -> set(j, (dynamic_cast <ArraySequence<T>*> (list)) -> data -> get(i));
+           dynamic_cast <ArraySequence<T>&> (newSequence).data -> set(j, (dynamic_cast <ArraySequence<T>*> (list)) -> data -> get(i));
            j++;
        }
-       return dynamic_cast <Sequence<T>*> (concatSequence);
     };
     void printArraySequence(){
         this -> data -> printArray();
