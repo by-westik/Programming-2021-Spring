@@ -26,16 +26,18 @@ int main() {
     cout << "Insert element in a(index 7)" << endl;
     a.insertAt(456, 7);
     a.printArraySequence();
-    ArraySequence<int> sub_array(*dynamic_cast <ArraySequence<int>*>(a.getSubsequence(3, 7)));
+    ArraySequence<int> sub_array;//(*dynamic_cast <ArraySequence<int>*>(a.getSubsequence(3, 7)));
+    a.getSubsequence(1, 4, sub_array);
     cout << "Sub array" << endl;
     sub_array.printArraySequence();
     cout << "Concat array" << endl;
-    ArraySequence<int> c_array(*dynamic_cast <ArraySequence<int>*>(a.concat(&a_copy)));
+    ArraySequence<int> c_array;//(*dynamic_cast <ArraySequence<int>*>(a.concat(&a_copy)));
+    a.concat(&a_copy, c_array);
     c_array.printArraySequence();
     cout << "LinkedList" << endl;
     LinkedListSequence<int> l(array_1, 5);
     cout << "Create LinkedListSequence l" << endl;
-    l.printLinkedListSequence();
+        l.printLinkedListSequence();
     cout << "First l element - " << l.getFirst()  << " last l element - " << l.getLast() << " len of l - " << l.getLength() << endl;
     cout << "Create copy LinkedListSequence l_copy" << endl;
     LinkedListSequence<int> l_copy(l);
@@ -53,15 +55,16 @@ int main() {
     }
     l.printLinkedListSequence();
     cout << "First l element - " << l.getFirst()  << " last l element - " << l.getLast() << " len of l - " << l.getLength() << endl;
-    cout << "Create sublist from l (startIndex = 4; endIndex = 9" << endl;
     cout << "Insert element 456 in l (index = 0)" << endl;
     l.insertAt(456, 9);
-    l.printLinkedListSequence();
+        l.printLinkedListSequence();
     cout << "First l element - " << l.getFirst()  << " last l element - " << l.getLast() << " len of l - " << l.getLength() << endl;
-    LinkedListSequence<int> sub_l(*dynamic_cast <LinkedListSequence<int>*>(l.getSubsequence(3, 11)));
+    LinkedListSequence<int> sub_l;//(*dynamic_cast <LinkedListSequence<int>*>(l.getSubsequence(3, 11)));
+    l.getSubsequence(3, 11, sub_l);
     sub_l.printLinkedListSequence();
     cout << "Concat two lists - list l and list l_copy" << endl;
-    LinkedListSequence<int> c_l(*dynamic_cast <LinkedListSequence<int>*>(l.concat(&l_copy)));
+    LinkedListSequence<int> c_l;//(*dynamic_cast <LinkedListSequence<int>*>(l.concat(&l_copy)));
+    l.concat(&l_copy, c_l);
     c_l.printLinkedListSequence();
     return 0;
 }
