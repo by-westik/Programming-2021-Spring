@@ -11,8 +11,12 @@ public:
     int size;
     DynamicArray(int _size)
     :size(_size)
-    ,array(new T[_size])
     {
+      if(_size){
+          array = new T[_size];
+      }else{
+          array = NULL;
+      }
     };
     DynamicArray(const T* _array, int _size)
     :size(_size)
@@ -21,7 +25,6 @@ public:
         for(int i = 0; i < _size; i++){
             array[i] = std::move(_array[i]);
         }
-       std::cout << "DynamicArray const* Constructor" << std::endl;
     };
     DynamicArray(DynamicArray <T> const &dynamicArray)
     :size(dynamicArray.size)
@@ -30,10 +33,8 @@ public:
        for(int i = 0; i < dynamicArray.size; i++){
            array[i] = std::move(dynamicArray.array[i]);
        }
-       std::cout << "DynamicArray copy Constructor" << std::endl;
     };
     ~DynamicArray(){
-        std::cout << "DynamicArray destructor" << std::endl;
         delete[] array;
     };
     void printArray()
@@ -56,20 +57,22 @@ public:
     }
     void resize(int newSize)
     {
-        T *newArray = new T[newSize];
-        if(size > newSize){
-             for(int i = 0; i < newSize; i++){
-                newArray[i] = std::move(array[i]);
-             }
-        } else if(size <= newSize){
-            for(int i = 0; i < size; i++){
-                newArray[i] = std::move(array[i]);
+        if(this -> size != 0){
+            T *newArray = new T[newSize];
+            if(this -> size > newSize){
+                for(int i = 0; i < newSize; i++){
+                    newArray[i] = std::move(array[i]);
+                }
+            } else if(this -> size <= newSize){
+                for(int i = 0; i < size; i++){
+                    newArray[i] = std::move(array[i]);
+                }
             }
+            delete[] array;
+            this -> array = newArray;
+        } else {
+            this -> array = new T[newSize];
         }
-        delete[] array;
-        this -> array = newArray;
         size = newSize;
     }
 };
-
-#endif //LABA_2_DYNAMICARRAY_H
