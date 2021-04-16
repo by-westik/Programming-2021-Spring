@@ -1,3 +1,4 @@
+
 //
 // Created by User on 09.04.2021.
 //
@@ -5,20 +6,19 @@
 #ifndef LABA_2_STACK_H
 #define LABA_2_STACK_H
 
-
-template <class T> class Stack {
+template <class T, template <class> class Sequence> class Stack {
 public:
-    LinkedListSequence<T> *list;
+    Sequence <T> *list;
     Stack()
-    :list(new LinkedListSequence<T>())
+    :list(new Sequence<T>())
     {
     };
     Stack(const T* _list, int _size)
-    :list(new LinkedListSequence<T>(_list, _size))
+    :list(new Sequence<T>(_list, _size))
     {
     };
-    Stack(Stack <T> &stack)
-    :list(new LinkedListSequence<T>(*(stack.list)))
+    Stack(Stack <T, Sequence> &stack)
+    :list(new Sequence<T>(*(stack.list)))
     {
     };
     ~Stack(){
@@ -37,7 +37,7 @@ public:
         return this -> list ->  getFirst();
     };
     void printStack(){
-        this -> list -> printLinkedListSequence();
+        this -> list -> printSequence();
     };
     void push(T item){
         this -> list -> append(item);
@@ -55,15 +55,11 @@ public:
             ptr = ptr -> next;
         };
     };
-    Stack <T>* subStack(int startIndex, int endIndex){
-        Stack<T> *subStack(new Stack());
-        subStack -> list = static_cast <LinkedListSequence<T>*> (this -> list ->getSubsequence(startIndex, endIndex));
-        return subStack;
+    void subStack(int startIndex, int endIndex, Stack <T, Sequence> &subStack){
+        this -> list -> getSubsequence(startIndex, endIndex, *subStack.list);
     }
-    Stack <T>* concatStack(Stack<T> &stack){
-        Stack<T> *concatStack(new Stack(*this));
-        concatStack -> list = static_cast <LinkedListSequence<T>*> (this -> list -> concat(dynamic_cast<Sequence<T>*>(stack.list)));
-        return concatStack;
+    void concatStack(Stack <T, Sequence> *stack, Stack <T, Sequence> &concatStack){
+        this -> list -> concat(stack -> list, *concatStack.list);
     };
 };
 
