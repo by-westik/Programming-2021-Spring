@@ -42,18 +42,13 @@ public:
     void push(T item){
         this -> list -> append(item);
     };
-    void pop(){
-        Item <T> *ptr = this -> list -> data -> head;
-        this -> list -> data -> head = this -> list -> data -> head -> next;
-        delete ptr;
-        this -> list -> data -> size--;
-    };
-    void map(){
-        Item <T> *ptr = this -> list -> data -> head;
-        while(ptr){
-            ptr -> data *= 2;
-            ptr = ptr -> next;
-        };
+    void pop(){//А я не могу в Sequence добавить методы удаления элемента?(первого, последнего, по индексу) Тогда, возможно, получиться не создавать новую стуктуру
+        Sequence <T> *newList = new Sequence <T> ();
+        for(int i = 1; i < this -> getSize(); i++){
+            newList -> prepend(this -> list -> get(i));
+        }
+        delete list;
+        this -> list = newList;
     };
     void subStack(int startIndex, int endIndex, Stack <T, Sequence> &subStack){
         this -> list -> getSubsequence(startIndex, endIndex, *subStack.list);
@@ -61,6 +56,14 @@ public:
     void concatStack(Stack <T, Sequence> *stack, Stack <T, Sequence> &concatStack){
         this -> list -> concat(stack -> list, *concatStack.list);
     };
+    void map(T function(T , T), T n){
+        Sequence <T> *newList = new Sequence <T> ();
+        for(int i = 0; i < this -> getSize(); i++){
+            newList -> prepend(function(this -> list -> get(i), n));
+        }
+        delete list;
+        this -> list = newList;
+    }
 };
 
 
