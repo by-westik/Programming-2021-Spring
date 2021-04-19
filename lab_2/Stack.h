@@ -42,13 +42,8 @@ public:
     void push(T item){
         this -> list -> append(item);
     };
-    void pop(){//А я не могу в Sequence добавить методы удаления элемента?(первого, последнего, по индексу) Тогда, возможно, получиться не создавать новую стуктуру
-        Sequence <T> *newList = new Sequence <T> ();
-        for(int i = 1; i < this -> getSize(); i++){
-            newList -> prepend(this -> list -> get(i));
-        }
-        delete list;
-        this -> list = newList;
+    void pop(){
+        this -> list -> deleteFirst();
     };
     void subStack(int startIndex, int endIndex, Stack <T, Sequence> &subStack){
         this -> list -> getSubsequence(startIndex, endIndex, *subStack.list);
