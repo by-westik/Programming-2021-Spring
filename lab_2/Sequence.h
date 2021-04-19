@@ -17,11 +17,13 @@ public:
     virtual void prepend(T item) = 0;
     virtual void insertAt(T item, int index) = 0;
     virtual void concat(Sequence <T> *list, Sequence <T> &newSubsequence) = 0;
+    virtual void printSequence() = 0;
+    virtual void deleteFirst() = 0; //Удаление первого элемента
 };
 
 template <class T> class LinkedListSequence : public Sequence <T>{
 public:
-    LinkedList <T> *data;
+    LinkedList <T> *data;//Мне лучше перенести data в private во всех структурах? Или не надо?
     LinkedListSequence(const T* _list, int _size)
     :data(new LinkedList<T>(_list, _size))
     {
@@ -64,21 +66,33 @@ public:
     {
         this -> data -> prepend(item);
     };
-    void insertAt(T item, int index) override{
+    void insertAt(T item, int index) override {
         this -> data -> insertAt(item, index);
     };
-    void printLinkedListSequence(){
-        this -> data -> printList();
+    void printSequence() override {
+        this -> data -> printList();//Получается, чтобы переопределить print для какого-то ученика/функции то надо создавать дочерний класс и переопредялять
+        //там функции, которые только для простых типов?
     };
     void getSubsequence(int startIndex,int endIndex, Sequence <T> &subSequence) override
     {
         this -> data -> getSubList(startIndex, endIndex, *(dynamic_cast <LinkedListSequence<T>&>(subSequence).data));
     };
-    void concat(Sequence <T> *list, Sequence <T> &concatSequence) override
-    {
+    void concat(Sequence <T> *list, Sequence <T> &concatSequence) override {
         this -> data -> concat((dynamic_cast <LinkedListSequence<T>*>(list)) -> data, *(dynamic_cast <LinkedListSequence<T>&>(concatSequence).data));
     };
+    void deleteFirst() override {
+        Item <T> *ptr = this -> data -> head;
+        if(!(this -> data -> head -> next)) {
+            this -> data -> head = this -> data -> head -> next;
+        } else {
+            this -> data -> head = NULL;
+            this -> data -> tail = NULL;
+        }
+        delete ptr;
+        this -> data -> size--;
+    };
 };
+
 
 template <class T> class ArraySequence :public Sequence<T>{
 public:
@@ -91,10 +105,12 @@ public:
     ArraySequence()
     :data(new DynamicArray<T>(0))
     {
+
     };
-        ArraySequence(ArraySequence<T> &arraySequence)
+    ArraySequence(ArraySequence<T> &arraySequence)
     :data(new DynamicArray<T>(*arraySequence.data))
     {
+
     };
     ~ArraySequence(){
       delete data;
@@ -158,8 +174,14 @@ public:
            j++;
        }
     };
-    void printArraySequence(){
+    void printSequence() override {
         this -> data -> printArray();
+    };
+    void deleteFirst() override {
+         for(int i = 0; i < this -> data -> size - 1; i++){
+             this -> data -> set(i, this -> data -> get(i + 1));
+         }
+         this -> data -> resize(this -> data -> getSize() - 1);
     };
 };
 
