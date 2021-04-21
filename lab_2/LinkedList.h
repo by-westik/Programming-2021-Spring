@@ -1,10 +1,9 @@
 //
 // Created by User on 04.04.2021.VVVVVVVVVVVVVB
 
-
-#include <memory>
 #ifndef LABA_2_LINKEDLIST_H
 #define LABA_2_LINKEDLIST_H
+#include "classesForStack.h"
 
 template <class T> class Item{
 public:
@@ -149,6 +148,15 @@ public:
         newList.size = this -> size + list -> size;
     }
 };
+
+template <> void LinkedList<Student>::printList(){
+    Item <Student> *ptr = this -> head;
+    while(ptr){
+        ptr -> data.printStudent();
+        ptr = ptr -> next;
+    }
+}
+
 #endif //LABA_2_LINKEDLIST_H
 
 
