@@ -4,6 +4,7 @@
 
 #ifndef LABA_2_DYNAMICARRAY_H
 #define LABA_2_DYNAMICARRAY_H
+#include "classesForStack.h"
 
 template <class T> class DynamicArray{
 public:
@@ -76,3 +77,9 @@ public:
         size = newSize;
     }
 };
+
+template <> void DynamicArray<Student>::printArray(){
+    for (int i = 0; i < size; i++)
+        array[i].printStudent();
+}
+#endif //LABA_2_DYNAMICARRAY_H
