@@ -59,6 +59,22 @@ public:
         delete list;
         this -> list = newList;
     }
+    void where(bool function(T), Stack <T, Sequence> &newStack){
+        for(int i = 0; i < this -> getSize(); i++){
+            if(function(this -> list -> get(i))){
+                newStack.push(this -> list -> get(i));
+            }
+        }
+    }
+    T reduce(T function(T, T), T n){//Пока не работает, но я это исправлю
+        T result;
+        for(int i = 0; i < this -> getSize(); i++){
+            result += function((this -> list -> get(i)), n);
+            std::cout << function((this -> list -> get(i)), n) << std::endl;
+        }
+        std::cout << result << std::endl;
+        return result;
+    }
 };
 
 
