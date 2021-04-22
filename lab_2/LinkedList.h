@@ -149,10 +149,26 @@ public:
     }
 };
 
-template <> void LinkedList<Student>::printList(){
+template <> void LinkedList <Student>::printList(){
     Item <Student> *ptr = this -> head;
     while(ptr){
         ptr -> data.printStudent();
+        ptr = ptr -> next;
+    }
+}
+
+template <> void LinkedList <Teacher>::printList(){
+    Item <Teacher> *ptr = this -> head;
+    while(ptr){
+        ptr -> data.printTeacher();
+        ptr = ptr -> next;
+    }
+}
+
+template <> void LinkedList <Complex>::printList(){
+    Item <Complex> *ptr = this -> head;
+    while(ptr){
+        ptr -> data.printComplex();
         ptr = ptr -> next;
     }
 }
