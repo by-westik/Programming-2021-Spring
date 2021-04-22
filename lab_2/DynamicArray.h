@@ -5,6 +5,33 @@
 #ifndef LABA_2_DYNAMICARRAY_H
 #define LABA_2_DYNAMICARRAY_H
 #include "classesForStack.h"
+//#include "ClassError.h"
+/* Это была очень неудачная попытка сделать обработку ошибок (＃￣ω￣) не буду больше такое делать(
+template <class T> class Error{
+private:
+    bool isOK;
+    T *result;
+public:
+    Error(){};
+    Error(bool _isOK, T *_result)
+    :isOK(_isOK)
+    ,result(std::move(_result))
+    {
+    };
+    bool getOK(){
+        return isOK;
+    }
+    T &getResult(){
+        return *result;
+    }
+    bool setOK(bool _isOK){
+        isOK = _isOK;
+    }
+    T &setResult(T &_result){
+        result = std::move(_result);
+    }
+};
+*/
 
 template <class T> class DynamicArray{
 public:
@@ -44,6 +71,20 @@ public:
             std::cout<< " " << array[i];
         std::cout << std::endl;
     };
+    /*  Error<T> get(int index)
+    {
+        if((index >= getSize()) || (index < 0)){
+            return Error <T> (false, NULL);
+        }
+        return Error <T> (true, &(array[index]));
+    };
+    Error<T> &set(int index, T &value)
+    {
+        if((index >= getSize()) || (index < 0)){
+            return Error <T> (false, NULL);
+        }
+        array[index] = value;
+    }*/
     T& get(int index)
     {
         return array[index];
@@ -77,9 +118,19 @@ public:
         size = newSize;
     }
 };
-
+//Можно ли как-то сделать так, чтоб передавать родительский класс Person, а методы бы вызывались от Student или Teacher?
 template <> void DynamicArray<Student>::printArray(){
     for (int i = 0; i < size; i++)
         array[i].printStudent();
+}
+
+template <> void DynamicArray<Teacher>::printArray(){
+    for (int i = 0; i < size; i++)
+        array[i].printTeacher();
+}
+
+template <> void DynamicArray<Complex>::printArray(){
+    for (int i = 0; i < size; i++)
+        array[i].printComplex();
 }
 #endif //LABA_2_DYNAMICARRAY_H
