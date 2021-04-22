@@ -5,6 +5,9 @@
 #include "Sequence.h"
 #ifndef LABA_2_STACK_H
 #define LABA_2_STACK_H
+#include "FunctionForMap.h"
+#include "FunctionForWhere.h"
+
 
 template <class T, template <class> class Sequence> class Stack {
 public:
@@ -66,14 +69,27 @@ public:
             }
         }
     }
-    T reduce(T function(T, T), T n){//Пока не работает, но я это исправлю
-        T result;
+    //Работающий reduce)))
+    T reduce(T function(T, T), T n){
+        T result = n;
         for(int i = 0; i < this -> getSize(); i++){
-            result += function((this -> list -> get(i)), n);
-            std::cout << function((this -> list -> get(i)), n) << std::endl;
+            result += function((this -> list -> get(i)), result);
         }
-        std::cout << result << std::endl;
         return result;
+    }
+    //Поиск подстека в стеке
+    int findSubStack(Stack <T, Sequence> *subStack){
+        for(int i = 0; i < this -> getSize(); i++){
+             int j = i, n = 0;
+             while((j < this -> getSize()) && (n < subStack -> getSize()) && (this -> list -> get(j) ==  subStack -> list -> get(n))){
+                 n++;
+                 j++;
+             };
+             std::cout << n << " " << subStack -> getSize() << std::endl;
+             if(n == subStack -> getSize()){
+                 return i;
+             }
+        };
     }
 };
 
