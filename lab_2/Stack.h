@@ -91,6 +91,57 @@ public:
              }
         };
     }
+    /*    template <T> void createStack(){
+        std::cout << "Сколько элементов Вы хотите добавить в стек?" << std::endl;
+        int len = 0;
+        while(len <= 0){
+            std::cin >> len;
+            }
+        for(int i = 0; i < len; i++){
+            std::cout << "Введите элемент" << std::endl;
+            T n = 0;
+            std::cin >> n;
+            this -> push(n);
+        }
+    }*/
+};
+
+/*
+template <> void Stack<Complex>::createStack(){
+    std::cout << "Сколько элементов Вы хотите добавить в стек?" << std::endl;
+    int len = 0;
+    while(len <= 0){
+        std::cin >> len;
+    }
+    for(int i = 0; i < len; i++){
+        std::cout << "Введите x" << std::endl;
+        double r, im;
+        std::cin >> r;
+        std::cout << "Введите y" << std::endl;
+        std::cin >> im;
+        this -> push(Complex(r,im));
+    }
+};
+*/
+//Я пока не знаю, как это исправить. Ноо, если я вот так запишу функцию
+//template <> void Stack<Complex, Sequence>::createStack() , то все ломается, то есть вызываетя верхняя функция для простых типов
+//С чем это может быть связано? Или как это исправить? (｡╯︵╰｡)
+/*
+template <> void Stack<Complex, ArraySequence>::createStack(){
+    std::cout << "Сколько элементов Вы хотите добавить в стек?" << std::endl;
+    int len = 0;
+    while(len <= 0){
+        std::cin >> len;
+    }
+    for(int i = 0; i < len; i++){
+        std::cout << "Введите x" << std::endl;
+        double r, im;
+        std::cin >> r;
+        std::cout << "Введите y" << std::endl;
+        std::cin >> im;
+        this -> push(Complex(r,im));
+    }
+};*/
 };
 
 
