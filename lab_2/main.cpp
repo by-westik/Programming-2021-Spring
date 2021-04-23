@@ -28,7 +28,7 @@ template <> void createStack <Complex, LinkedListSequence> (Stack <Complex, Link
         stack.push(Complex(r,im));
     }
 }
-
+*/
 int main () {
     Stack <int, LinkedListSequence> n;
   //  n.createStack();
