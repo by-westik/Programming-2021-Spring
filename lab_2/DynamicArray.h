@@ -5,33 +5,20 @@
 #ifndef LABA_2_DYNAMICARRAY_H
 #define LABA_2_DYNAMICARRAY_H
 #include "classesForStack.h"
-//#include "ClassError.h"
-/* Это была очень неудачная попытка сделать обработку ошибок (＃￣ω￣) не буду больше такое делать(
-template <class T> class Error{
+
+class Error{
 private:
-    bool isOK;
-    T *result;
+    std::string error;
 public:
-    Error(){};
-    Error(bool _isOK, T *_result)
-    :isOK(_isOK)
-    ,result(std::move(_result))
+    Error(std::string _error)
+    :error(std::move(_error))
     {
-    };
-    bool getOK(){
-        return isOK;
     }
-    T &getResult(){
-        return *result;
-    }
-    bool setOK(bool _isOK){
-        isOK = _isOK;
-    }
-    T &setResult(T &_result){
-        result = std::move(_result);
+    std::string getError(){
+        return error.c_str();
     }
 };
-*/
+
 
 template <class T> class DynamicArray{
 public:
@@ -71,27 +58,20 @@ public:
             std::cout<< " " << array[i];
         std::cout << std::endl;
     };
-    /*  Error<T> get(int index)
-    {
-        if((index >= getSize()) || (index < 0)){
-            return Error <T> (false, NULL);
-        }
-        return Error <T> (true, &(array[index]));
-    };
-    Error<T> &set(int index, T &value)
-    {
-        if((index >= getSize()) || (index < 0)){
-            return Error <T> (false, NULL);
-        }
-        array[index] = value;
-    }*/
-    T& get(int index)
-    {
+    T& get(int index){
+        if((index < 0) || (index >= size))
+            throw Error("Index out of range");
         return array[index];
-    };
-    void set(int index, T &value)
-    {
+    }
+    void set(int index, T &value){
+        if((index < 0) || (index >= size))
+            throw Error("Index out of range");
         array[index] = value;
+    }
+    T& operator[](int index){
+        if((index < 0) || (index >= size))
+            throw Error("Index out of range");
+        return array[index];
     }
     int getSize()
     {
@@ -118,7 +98,7 @@ public:
         size = newSize;
     }
 };
-//Можно ли как-то сделать так, чтоб передавать родительский класс Person, а методы бы вызывались от Student или Teacher?
+
 template <> void DynamicArray<Student>::printArray(){
     for (int i = 0; i < size; i++)
         array[i].printStudent();
