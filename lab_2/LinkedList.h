@@ -1,9 +1,10 @@
 //
-// Created by User on 04.04.2021.VVVVVVVVVVVVVB
+// Created by User on 04.04.2021.VVVVVVVVVVVVV
 
 #ifndef LABA_2_LINKEDLIST_H
 #define LABA_2_LINKEDLIST_H
-#include "classesForStack.h"
+#include "classesForStack.cpp"
+#include "Error.cpp"
 
 template <class T> class Item{
 public:
@@ -13,7 +14,6 @@ public:
     :data(_data),
     next(_next)
     {
-
     };
 };
 
@@ -27,7 +27,6 @@ public:
     ,tail(NULL)
     ,size(0)
     {
-
     };
     LinkedList(const T* array, int _size)
         :size(_size)
@@ -35,7 +34,6 @@ public:
         Item <T> *ptr, *last;
         head = new Item<T>(array[0], NULL);
         last = head;
-        std::cout << "Constructor" << std::endl;
         for (int i = 1; i < _size; i++) {
             ptr = new Item<T>(array[i], NULL);
             last -> next = ptr;
@@ -46,7 +44,6 @@ public:
     LinkedList(LinkedList <T> const &linkedList)
         :size(linkedList.size)
         {
-        std::cout << "Copy constructor" <<std::endl;
         if(!linkedList.size){
             head = NULL;
             tail = NULL;
@@ -71,15 +68,29 @@ public:
             delete ptr_pred;
             ptr_pred = ptr;
         }
-        std::cout << "Destructor" <<std::endl;
     }
     T& getFirst(){
+        if(!head)
+            throw Error("List is empty");
         return head -> data;
     }
     T& getLast(){
+        if(!tail)
+            throw Error("List is empty");
         return tail -> data;
     }
     T& get(int index) {
+        if((index < 0) || (index >= size))
+            throw Error("Index out of range");
+        Item <T> *ptr = head;
+        for(int i = 0; i < index; i++){
+            ptr = ptr -> next;
+        }
+        return ptr -> data;
+    }
+    T& operator[](int index){
+        if((index < 0) || (index >= size))
+            throw Error("Index out of range");
         Item <T> *ptr = head;
         for(int i = 0; i < index; i++){
             ptr = ptr -> next;
@@ -87,6 +98,8 @@ public:
         return ptr -> data;
     }
     void getSubList(int start, int end, LinkedList <T> &subList){
+        if((start < 0) || (end < 0) || (start >= size) || (end >= size) || (start > end))
+            throw Error("Index out of range");
         for(int i = start; i < end; i++){
             subList.prepend(this -> get(i));
         }
@@ -97,7 +110,7 @@ public:
     }
     void printList(){
         Item <T> *ptr = this -> head;
-        while(ptr != this -> tail -> next){
+        while(ptr != NULL){
             std::cout << ptr -> data << " ";
             ptr = ptr -> next;
         }
@@ -123,15 +136,17 @@ public:
         this -> size++;
     }
     void insertAt(T value, int index) {
+        if((index < 0) || (index >= size))
+            throw Error("Index out of range");
         if(!index){
             append(value);
         } else {
-            Item <T> *ptr = head;
+            Item <T> *ptr = this -> head;
             for(int i = 0; i < index - 1; i++){
                 ptr = ptr -> next;
             }
-            Item <T> *newElement = new Item <T> (value, ptr -> next -> next);
-            ptr -> next -> next = newElement;
+            Item <T> *newElement = new Item <T> (value, ptr -> next);
+            ptr -> next = newElement;
             this -> size++;
         }
     }
@@ -156,7 +171,6 @@ template <> void LinkedList <Student>::printList(){
         ptr = ptr -> next;
     }
 }
-
 template <> void LinkedList <Teacher>::printList(){
     Item <Teacher> *ptr = this -> head;
     while(ptr){
@@ -173,6 +187,6 @@ template <> void LinkedList <Complex>::printList(){
     }
 }
 
+
+
 #endif //LABA_2_LINKEDLIST_H
-
-
