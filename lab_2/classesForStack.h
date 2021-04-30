@@ -1,141 +1,64 @@
-
 #ifndef LABA_2_CLASSESFORSTACK_H
 #define LABA_2_CLASSESFORSTACK_H
+#include <string>
+
+using namespace std;
 
 class Person{
 private:
-    const char *firstName;
-    const char *middleName;
-    const char *lastName;
+    std::string firstName;
+    std::string middleName;
+    std::string lastName;
     int age;
 public:
-    const char *getFirstName(){
-        return firstName;
-    };
-    const char *getMiddleName(){
-        return middleName;
-    };
-    const char *getLastName(){
-        return lastName;
-    };
-    int getAge(){
-        return age;
-    };
-    Person(const char *_firstName = NULL, const char *_middleName = NULL, const char *_lastName = NULL, int _age = 0)
-    :firstName(std::move(_firstName))
-    ,middleName(std::move(_middleName))
-    ,lastName(std::move(_lastName))
-    ,age(_age)
-    {
-    };
-    void printPerson(){
-        std::cout << "FIO - " << getLastName() << " " << getFirstName() << " " << getMiddleName() <<std::endl;
-        std::cout << "Age - " << getAge() << std::endl;
-    };
+    std::string getFirstName() const;
+    std::string getMiddleName() const;
+    std::string getLastName() const;
+    int getAge() const;
+    Person(int _age, std::string _firstName, std::string _middleName, std::string _lastName);
+    void printPerson() const;
 };
 
 class Student: public Person{
 private:
-    const char *group;
+    std::string group;
 public:
-    const char *getGroup(){
-        return group;
-    };
-    Student(const char *_firstName = NULL, const char *_middleName = NULL, const char *_lastName = NULL, int _age = 0, const char *_group = NULL)
-    :Person(_firstName, _middleName, _lastName, _age)
-    ,group(std::move(_group))
-    {
-    };
-    void printStudent(){
-        printPerson();
-        std::cout << "Group - " << getGroup() << std::endl;
-    }
-    bool operator== (Student &_student){
-        return ((this -> getFirstName() == _student.getFirstName()) && (this -> getLastName() == _student.getLastName())
-                 && (this -> getMiddleName() == _student.getMiddleName()) && (this -> getAge() == _student.getAge()) && (this -> getGroup() == _student.getGroup()));
-    }
+    std::string getGroup() const;
+    Student(int _age, std::string _firstName, std::string _middleName, std::string _lastName, string _group);
+    void printStudent() const;
+    bool operator== (Student &_student) const;
+    bool operator> (Student &_student) const;
 };
-
 class Teacher: public Person{
 private:
-    const char *subject;
+    std::string subject;
 public:
-    const char *getSubject(){
-        return subject;
-    };
-    Teacher(const char *_firstName = NULL, const char *_middleName = NULL, const char *_lastName = NULL, int _age = 0, const char *_subject = NULL)
-    :Person(_firstName, _middleName, _lastName, _age)
-    ,subject(std::move(_subject))
-    {
-    };
-    void printTeacher(){
-        printPerson();
-        std::cout << "Subject - " << getSubject() << std::endl;
-    }
-    bool operator== (Teacher &_teacher){
-        return ((this -> getFirstName() == _teacher.getFirstName()) && (this -> getLastName() == _teacher.getLastName())
-                 && (this -> getMiddleName() == _teacher.getMiddleName()) && (this -> getAge() == _teacher.getAge()) && (this -> getSubject() == _teacher.getSubject())$    }
+    std::string getSubject() const;
+    Teacher(int _age, std::string _firstName, std::string _middleName, std::string _lastName, string _subject);
+    void printTeacher() const;
+    bool operator== (Teacher &_teacher) const;
+    bool operator> (Teacher &_teacher) const;
 };
-                
- class Complex{
+
+class Complex{
 private:
     double real;
     double imaginary;
 public:
     Complex(){};
-    Complex(double _real, double _imaginary)
-    :real(_real)
-    ,imaginary(_imaginary)
-    {
-    };
-    Complex operator+ (const Complex &_complex) const{
-        Complex result;
-        result.real = real + _complex.real;
-        result.imaginary = imaginary + _complex.imaginary;
-        return result;
-    }
-    Complex operator- (const Complex &_complex) const{
-        Complex result;
-        result.real = real - _complex.real;
-        result.imaginary = imaginary - _complex.imaginary;
-        return result;
-    }
-    Complex operator* (const Complex &_complex) const{
-        Complex result;
-        result.real = real * _complex.real;
-        result.imaginary = imaginary * _complex.imaginary;
-        return result;
-    }
-    Complex operator/ (const Complex &_complex) const{
-        Complex result;
-        result.real = real / _complex.real;
-        result.imaginary = imaginary / _complex.imaginary;
-        return result;
-    }
-    bool operator== (const Complex &_complex) const{
-        return ((real == _complex.real) && (imaginary == _complex.imaginary));
-    }
-    bool operator< (const Complex &_complex) const{
-        return ((real < _complex.real) && (imaginary < _complex.imaginary));
-    }
-    bool operator> (const Complex &_complex) const{
-        return ((real > _complex.real) && (imaginary > _complex.imaginary));
-    }
-    double getReal(){
-        return real;
-    }
-    double getImaginary(){
-        return imaginary;
-    }
-    void printComplex(){
-        std::cout << getReal() << "x + " << getImaginary() << "y" << std::endl;
-    }
+    Complex(double _real, double _imaginary);
+    Complex operator+ (const Complex &_complex) const;
+    Complex operator- (const Complex &_complex) const;
+    Complex operator* (const Complex &_complex) const;
+    Complex operator/ (const Complex &_complex) const;
+    bool operator== (const Complex &_complex) const;
+    bool operator< (const Complex &_complex) const;
+    bool operator> (const Complex &_complex) const;
+    double getReal() const;
+    double getImaginary() const;
+    void setReal(double _real);
+    void setImaginary(double _imaginary);
+    void printComplex() const;
 };
 
 #endif //LABA_2_CLASSESFORSTACK_H
-
-
-#endif //LABA_2_CLASSESFORSTACK_H
-
-
-
