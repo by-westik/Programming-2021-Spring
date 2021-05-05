@@ -44,6 +44,7 @@ private:
     std::string subject;
 public:
     std::string getSubject() const;
+    void setSubject(std::string _subject);
     Teacher(){};
     Teacher(int _age, std::string _firstName, std::string _middleName, std::string _lastName, string _subject);
     void printTeacher() const;
