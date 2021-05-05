@@ -8,6 +8,9 @@
 const char *MENU[] = {"0.Exit", "1.Int", "2.Double", "3.Complex numbers", "4.Char", "5.Function", "6.Students", "7.Teachers"};
 const int MENU_SIZE = sizeof(MENU) / sizeof(MENU[0]);
 
+const char *SEQ[] = {"0.Exit", "1.DynamicArraySequence", "2.LinkedListSequence"};
+const int SEQ_SIZE = sizeof(SEQ) / sizeof(SEQ[0]);
+
 const char *FUNCTION[] = {"0.Exit", "1.Map", "2.Where", "3.Reduce", "4.Conatenation", "5.SubSequence(index)", "6.Find SubSequence"};
 const int FUNCTION_SIZE = sizeof(FUNCTION) / sizeof(FUNCTION[0]);
 
@@ -25,6 +28,8 @@ template <class T, template <class> class Sequence> void functionChoisenMap(Stac
 template <class T, template <class> class Sequence> void functionChoisenReduce(Stack <T, Sequence> *stack,  T function(T, T));
 template <class T, template <class> class Sequence> void functionForMapReduce(Stack <T, Sequence> *stack, void functionChoisen(Stack <T, Sequence> *stack, T function (T, T)));
 template <class T, template <class> class Sequence> void functionForStack(Stack <T, Sequence> *stack);
+template <class T, template <class> class Sequence> void createTypeStack();
+template <class T> void choisenSequence();
 
 void menu(){
     bool choiceType = true;
@@ -35,41 +40,25 @@ void menu(){
             case 1:
                 {
                     std::cout << "Int" << std::endl;
-                    Stack <int, LinkedListSequence> *stackInt = new Stack <int, LinkedListSequence>();
-                    createStack <int, LinkedListSequence> (*stackInt);
-                    stackInt -> printStack();
-                    functionForStack <int, LinkedListSequence> (stackInt);
-                    delete stackInt;
+                    choisenSequence <int> ();
                 }
                 break;
             case 2:
                 {
                     std::cout << "Double" << std::endl;
-                    Stack <double, LinkedListSequence> *stackFloat = new Stack <double, LinkedListSequence>();
-                    createStack <double, LinkedListSequence> (*stackFloat);
-                    stackFloat -> printStack();
-                    functionForStack <double, LinkedListSequence>(stackFloat);
-                    delete stackFloat;
+                    choisenSequence <double> ();
                 }
                 break;
             case 3:
                 {
                     std::cout << "Complex numbers" << std::endl;
-                    Stack <Complex, LinkedListSequence> *stackComplex = new Stack <Complex, LinkedListSequence>();
-                    createStack <Complex, LinkedListSequence> (*stackComplex);
-                    stackComplex -> printStack();
-                    functionForStack <Complex, LinkedListSequence> (stackComplex);
-                    delete stackComplex;
+                    choisenSequence <Complex> ();
                 }
                 break;
             case 4:
                 {
                     std::cout << "Char" << std::endl;
-                    Stack <char, LinkedListSequence> *stackChar = new Stack <char, LinkedListSequence>();
-                    createStack <char, LinkedListSequence> (*stackChar);
-                    stackChar -> printStack();
-                    functionForStack <char, LinkedListSequence>(stackChar);
-                    delete stackChar;
+                    choisenSequence <char> ();
                 }
                 break;
             case 5:
@@ -103,6 +92,37 @@ void menu(){
                 break;
         }
     }
+};
+
+template <class T> void choisenSequence(){
+    bool choiceSequence = true;
+    int a = 0;
+    a = dialog(SEQ, SEQ_SIZE);
+    switch(a) {
+        case 0:
+            break;
+        case 1:
+            {
+                createTypeStack <T, ArraySequence> ();
+            }
+            break;
+        case 2:
+            {
+                createTypeStack <T, LinkedListSequence> ();
+            }
+            break;
+         default:
+            std::cout << "Error" << std::endl;
+            break;
+     };
+};
+
+template <class T, template <class> class Sequence> void createTypeStack(){
+    Stack <T, Sequence> *stackType = new Stack <T, Sequence> ();
+    createStack <T, Sequence> (*stackType);
+    stackType -> printStack();
+    functionForStack <T, Sequence> (stackType);
+    delete stackType;
 };
 
 int dialog(const char *msgs[], const int size){
