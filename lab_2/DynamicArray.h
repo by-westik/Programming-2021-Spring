@@ -44,8 +44,7 @@ public:
     ~DynamicArray(){
         delete[] array;
     };
-    void printArray()
-    {
+    void printArray(){
         for (int i = 0; i < size; i++)
             std::cout<< " " << array[i];
         std::cout << std::endl;
@@ -54,40 +53,40 @@ public:
         if((index < 0) || (index >= size))
             throw Error("Index out of range");
         return array[index];
-    }
+    };
     void set(int index, T &value){
         if((index < 0) || (index >= size))
             throw Error("Index out of range");
         array[index] = value;
-    }
+    };
     T& operator[](int index){
         if((index < 0) || (index >= size))
             throw Error("Index out of range");
         return array[index];
-    }
+    };
     int getSize(){
         return size;
-    }
-/*    void resize(int newSize){
+    };
+    void resize(int newSize){
         if(this -> size != 0){
             T *newArray = new T[newSize];
             if(this -> size > newSize){
                 for(int i = 0; i < newSize; i++){
                     newArray[i] = std::move(array[i]);
-                }
+                };
             } else if(this -> size <= newSize){
                 for(int i = 0; i < size; i++){
                     newArray[i] = std::move(array[i]);
-                }
-            }
+                };
+            };
             delete[] array;
             this -> array = newArray;
         } else {
             this -> array = new T[newSize];
-        }
+        };
         size = newSize;
-    }*/
-    void copyData(T *from, T *to, int size){
+    };
+/*    void copyData(T *from, T *to, int size){
         for(int i = 0; i < size; i++){
             to[i] = from[i];
         }
@@ -118,7 +117,7 @@ public:
             }
         }
         this -> size = newSize;
-    }
+    }*/
 };
 
 template <> void DynamicArray<Student>::printArray(){
