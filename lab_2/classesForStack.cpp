@@ -150,6 +150,10 @@ void Teacher::printTeacher() const{
     std::cout << "Subject - " << getSubject() << std::endl;
 };
 
+void Teacher::setSubject(std::string _subject){
+    this -> subject = _subject;
+};
+
 bool Teacher::operator==(Teacher &_teacher) const{
     return ((this -> getFirstName() == _teacher.getFirstName()) && (this -> getLastName() == _teacher.getLastName())
         && (this -> getMiddleName() == _teacher.getMiddleName()) && (this -> getAge() == _teacher.getAge()) && (this -> getSubject() == _teacher.getSubject()));
@@ -157,6 +161,15 @@ bool Teacher::operator==(Teacher &_teacher) const{
 
 bool Teacher::operator>(Teacher &_teacher) const{
     return (this -> getAge() > _teacher.getAge());
+};
+
+std::istream& operator>> (std::istream &in, Teacher &_teacher){
+    _teacher.createPerson();
+    std::string _subject;
+    std::cout << "Введите преподаваемый предмет" << std::endl;
+    in >> _subject;
+    _teacher.setSubject(_subject);
+    return in;
 };
 
 Complex::Complex(double _real, double _imaginary)
