@@ -48,6 +48,7 @@ template <class T, template <class> class Sequence> void functionChoisenReduce(S
 template <class T, template <class> class Sequence> void functionForWhere(Stack <T, Sequence> *stack);
 template <class T, template <class> class Sequence> void functionChoisenWhere(Stack <T, Sequence> *stack,  bool function(T, T));
 template <class T, template <class> class Sequence> void functionForScalar(LinearShape <T, Sequence> *shape,  T function(T, T));
+template <class T, template <class> class Sequence> void functionShape(LinearShape <T, Sequence> *shape,  T function(T, T));
 
 template <> void choisenSequence<std::pair<int,int>>(){
     bool choiceSequence = true;
@@ -494,11 +495,11 @@ template <class T, template <class> class Sequence> void functionForShape(Linear
                 break;
             case 1:
                 std::cout << "Addition" << std::endl;
-                functionForScalar(shape, addition);
+                functionShape(shape, addition);
                 break;
             case 2:
                 std::cout << "Substraction" << std::endl;
-                functionForScalar(shape, subtraction);
+                functionShape(shape, subtraction);
                 break;
             case 3:
                 std::cout << "Multiplication" << std::endl;
@@ -513,11 +514,23 @@ template <class T, template <class> class Sequence> void functionForShape(Linear
                     std::cout << solution << std::endl;
                 };
                 break;
+             default:
                 std::cout << "Error" << std::endl;
                 choiceFunction = false;
                 break;
          };
     };
+};
+
+template <class T, template <class> class Sequence> void functionShape(LinearShape <T, Sequence> *shape,  T function(T, T)){
+    std::cout << "Введите вторую линейную форму" << std::endl;
+    LinearShape <T, Sequence> *shapeTwo = new LinearShape <T, Sequence> ();
+    createShape(*shapeTwo);
+    shape -> printLinearShape();
+    shapeTwo -> printLinearShape();
+    shape -> changeShape(*shapeTwo, function);
+    shape -> printLinearShape();
+    delete shapeTwo;
 };
 
 template <class T, template <class> class Sequence> void functionForScalar(LinearShape <T, Sequence> *shape,  T function(T, T)){
