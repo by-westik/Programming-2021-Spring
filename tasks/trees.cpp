@@ -112,10 +112,42 @@ int calculate(Node *node){
         cout << "node -> value = " << node -> value << endl;
         return stoi(node -> value);
     };
-    for(int i = 0; i < node -> childs -> size(); i++){
-        calculate(node -> childs -> at(i));
-        if(nod)
+    int result = 0;
+    cout << "node -> childs -> size() = " << node -> childs -> size() << endl;
+    cout << "node -> type = " << node -> type << endl;
+    if(node -> type == "+"){
+        for(int i = 0; i < node -> childs -> size(); i++){
+            result += calculate(node -> childs -> at(i));
+        };
+    } else if(node -> type == "-"){
+        for(int i = 0; i < node -> childs -> size(); i++){
+            result -= calculate(node -> childs -> at(i));
+        };
+    } else if(node -> type == "*"){
+        for(int i = 0; i < node -> childs -> size(); i++){
+            result *= calculate(node -> childs -> at(i));
+        };
+    } else if(node -> type == "/"){
+        for(int i = 0; i < node -> childs -> size(); i++){
+            result /= calculate(node -> childs -> at(i));
+        };
     };
+        /*for(int i = 0; i < node -> childs -> size(); i++){
+        cout << "node -> childs -> at(i) -> type = " << node -> childs -> at(i) -> type << endl;
+        if(node -> childs -> at(i) -> type == "+"){
+            result += calculate(node -> childs -> at(i));
+        } else if(node -> childs -> at(i) -> type == "-"){
+            result -= calculate(node -> childs -> at(i));
+        } else if(node -> childs -> at(i) -> type == "*"){
+            result *= calculate(node -> childs -> at(i));
+        } else if(node -> childs -> at(i) -> type == "/"){
+            result /= calculate(node -> childs -> at(i));
+        } else if(node -> childs -> at(i) -> type == "brackets"){
+            for(int j = 0; j < node -> childs -> at(i) -> childs -> size(); j++){
+                result += calculate(node -> childs -> at(i) -> childs -> at(j));
+            };
+        };*/
+    return result;
 };
 
 int main(){
