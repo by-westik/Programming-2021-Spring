@@ -131,22 +131,11 @@ int calculate(Node *node){
         for(int i = 0; i < node -> childs -> size(); i++){
             result /= calculate(node -> childs -> at(i));
         };
-    };
-        /*for(int i = 0; i < node -> childs -> size(); i++){
-        cout << "node -> childs -> at(i) -> type = " << node -> childs -> at(i) -> type << endl;
-        if(node -> childs -> at(i) -> type == "+"){
+    }else if(node -> type == "brackets"){
+        for(int i = 0; i < node -> childs -> size(); i++){
             result += calculate(node -> childs -> at(i));
-        } else if(node -> childs -> at(i) -> type == "-"){
-            result -= calculate(node -> childs -> at(i));
-        } else if(node -> childs -> at(i) -> type == "*"){
-            result *= calculate(node -> childs -> at(i));
-        } else if(node -> childs -> at(i) -> type == "/"){
-            result /= calculate(node -> childs -> at(i));
-        } else if(node -> childs -> at(i) -> type == "brackets"){
-            for(int j = 0; j < node -> childs -> at(i) -> childs -> size(); j++){
-                result += calculate(node -> childs -> at(i) -> childs -> at(j));
-            };
-        };*/
+        };
+    };
     return result;
 };
 
@@ -157,9 +146,9 @@ int main(){
     Node *tree = NULL;
     tree = parseString(str);
    // cout << "tree -> type" << tree -> type << endl;
-    cout << "str = " << getStringFromTree(tree) << endl;
+  //  cout << "str = " << getStringFromTree(tree) << endl;
  //   cout << tree -> value << endl;
-    calculate(tree);
+    cout << getStringFromTree(tree) << " = " << calculate(tree) << endl;
     return 0;
 };
 
