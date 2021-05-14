@@ -32,11 +32,17 @@ Node *parseString(string str){
     Node *tree = new Node("terminate", str);
     for(int i = (str[0] != '-') ? 0 : 1; i < str.length(); i++){
         string nextVar = getNextVariable(str.substr(i, str.length()));
+        if(nextVar.empty()){
+            return NULL;
+        };
         i += nextVar.length();
         if(i == str.length()){
             break;
         };
         string operand = getNextOperator(str.substr(i, str.length()));
+        if(operand == "n"){
+            break;
+        };
         map <string, int> typesEnum;
         typesEnum.insert(std::pair<string, int> ("*", 1));
         typesEnum.insert(std::pair<string, int> ("/", 2));
@@ -44,33 +50,29 @@ Node *parseString(string str){
         typesEnum.insert(std::pair<string, int> ("+", 4));
         typesEnum.insert(std::pair<string, int> ("terminate", -1000));
         typesEnum.insert(std::pair<string, int> ("brackets", -1000));
-        if(operand != "n"){
-        if((typesEnum.find(operand) -> second) > (typesEnum.find(tree -> type) -> second)){
-                tree -> type = operand;
-                separatorIndexes.erase(separatorIndexes.begin());
-                separatorIndexes.push_back(-operand.length());
-        };
-        if(operand == tree -> type){
-                separatorIndexes.push_back(i);
-        };
-        }else {
-            break;
+        
+                if((typesEnum.find(operand) -> second) > (typesEnum.find(tree -> type) -> second)){
+            tree -> type = operand;
+            separatorIndexes.clear();
+            separatorIndexes.push_back(-operand.length());
+            separatorIndexes.push_back(i);
         };
     };
-
-    if(tree -> type == "terminate"){
+        if(tree -> type == "terminate"){
         int firstNonMinusIndex = (str[0] != '-') ? 0 : 1;
         if(str[firstNonMinusIndex] == '('){
+
             Node *child = parseString(str.substr(firstNonMinusIndex + 1, str.length() - 2));
             if(!child){
                 return NULL;
             };
-//            tree -> childs -> clear();
+            tree -> childs -> clear();
             tree -> childs -> push_back(child);
             tree -> type = "brackets";
         };
+
         if(str[0] == '-'){
-            Node *child = new Node(tree -> type, tree -> value.substr(0, 1));
+            Node *child = new Node(tree -> type, tree -> value.substr(1, str.length()));
             for(int i = 0; i < tree -> childs -> size(); i++){
                 child -> childs -> push_back(tree -> childs -> at(i));
             };
@@ -80,17 +82,23 @@ Node *parseString(string str){
         }
         return tree;
     };
-
     separatorIndexes.push_back(tree -> value.length());
-//    cout << "separatorIndexes.size() = " << separatorIndexes.size() << endl;
-    for(int i = 1; i < separatorIndexes.size(); i++){
+    if(separatorIndexes.size() == 2){
+        tree -> childs -> push_back(parseString(tree -> value.substr(separatorIndexes[0] + tree -> type.length(), separatorIndexes[1])));
+        return tree;
+    };
+    Node *middle = parseString(tree -> value.substr(separatorIndexes[0] + tree -> type.length(), separatorIndexes[1]));
+
+    for(int i = 2; i < separatorIndexes.size(); ++i){
         int left = separatorIndexes[i - 1] + 1, right = separatorIndexes[i];
-  //      cout << "tree -> value.substr(left, right) = " << tree -> value.substr(left, right) << endl;
         Node *insideTree = parseString(tree -> value.substr(left, right));
-        tree -> childs -> push_back(insideTree);
+        Node *temporary = new Node(tree -> type, tree -> value.substr(0, right));
+        temporary -> childs -> push_back(middle);
+        temporary -> childs -> push_back(insideTree);
+        middle = temporary;
     };
 
-    return tree;
+    return middle;
 };
 
 string getStringFromTree(Node *tree){
@@ -109,28 +117,23 @@ string getStringFromTree(Node *tree){
 
 int calculate(Node *node){
     if(node -> type == "terminate"){
-        cout << "node -> value = " << node -> value << endl;
+        //cout << "node -> value = " << node -> value << endl;
         return stoi(node -> value);
     };
     int result = 0;
-    cout << "node -> childs -> size() = " << node -> childs -> size() << endl;
-    cout << "node -> type = " << node -> type << endl;
     if(node -> type == "+"){
-        for(int i = 0; i < node -> childs -> size(); i++){
-            result += calculate(node -> childs -> at(i));
-        };
+        result += calculate(node -> childs -> at(0)) + calculate(node -> childs -> at(1));
     } else if(node -> type == "-"){
-        for(int i = 0; i < node -> childs -> size(); i++){
-            result -= calculate(node -> childs -> at(i));
-        };
+        if(node -> childs -> size() == 2){
+            result += calculate(node -> childs -> at(0)) - calculate(node -> childs -> at(1));
+        } else if(node -> childs -> size() == 1){
+//            cout << "node -> childs -> size() == 1 "<< endl;
+            result += -(calculate(node -> childs -> at(0)));
+        }
     } else if(node -> type == "*"){
-        for(int i = 0; i < node -> childs -> size(); i++){
-            result *= calculate(node -> childs -> at(i));
-        };
+        result += calculate(node -> childs -> at(0)) * calculate(node -> childs -> at(1));
     } else if(node -> type == "/"){
-        for(int i = 0; i < node -> childs -> size(); i++){
-            result /= calculate(node -> childs -> at(i));
-        };
+        result += calculate(node -> childs -> at(0)) / calculate(node -> childs -> at(1));
     }else if(node -> type == "brackets"){
         for(int i = 0; i < node -> childs -> size(); i++){
             result += calculate(node -> childs -> at(i));
@@ -145,10 +148,9 @@ int main(){
     getline(cin, str);
     Node *tree = NULL;
     tree = parseString(str);
-   // cout << "tree -> type" << tree -> type << endl;
-  //  cout << "str = " << getStringFromTree(tree) << endl;
- //   cout << tree -> value << endl;
-    cout << getStringFromTree(tree) << " = " << calculate(tree) << endl;
+    cout << "tree -> type = " << tree -> type << endl;
+
+    cout << "STR = " << getStringFromTree(tree) << " = " << calculate(tree) << endl;
     return 0;
 };
 
@@ -177,10 +179,9 @@ string getNextVariable(string str){
         }
         return str.substr(0, i);
     }
-
     string operators = "+-*/";
     int index = res.find_first_of(operators, 0);
-    if(index != -1){
+        if(index != -1){
         return res.substr(0, index);
     }
     return "";
