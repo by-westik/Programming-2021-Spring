@@ -33,19 +33,19 @@ public:
     ~binaryHeap(){
         delete heap;
     };
-    T get(int index) const{
+    T& get(int index) const{
         return this -> heap -> get(index);
     };
-    T getParent(int index) const{
+    T& getParent(int index) const{
         return this -> heap -> get((index - 1) / 2);
     };
-    T getLeft(int index) const{
+    T& getLeft(int index) const{
         return this -> heap -> get(index * 2 + 1);
     };
-    T getRight(int index) const{
+    T& getRight(int index) const{
         return this -> heap -> get(index * 2 + 2);
     };
-    T getMin() const{
+    T& getMin() const{
         T minElement = this -> heap -> get((this -> heap -> getSize()) / 2);
         for(int i = (this -> heap -> getSize()) / 2; i < this -> heap -> getSize(); i++){
             if(minElement > this -> heap -> get(i)){
@@ -54,7 +54,7 @@ public:
         };
         return minElement;
     };
-    T getMax() const{
+    T& getMax() const{
         return this -> heap -> get(0);
     };
     void heapify(int index){
